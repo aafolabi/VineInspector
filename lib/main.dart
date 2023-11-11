@@ -1,115 +1,218 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const App());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
+    );
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Introduction screen',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const OnBoardingPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class OnBoardingPage extends StatefulWidget {
+  const OnBoardingPage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  OnBoardingPageState createState() => OnBoardingPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class OnBoardingPageState extends State<OnBoardingPage> {
+  final introKey = GlobalKey<IntroductionScreenState>();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  void _onIntroEnd(context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const HomePage()),
+    );
+  }
+
+  Widget _buildFullscreenImage() {
+    return Image.asset(
+      'assets/fullscreen.jpg',
+      fit: BoxFit.cover,
+      height: double.infinity,
+      width: double.infinity,
+      alignment: Alignment.center,
+    );
+  }
+
+  Widget _buildImage(String assetName, [double width = 350]) {
+    return Image.asset('assets/$assetName', width: width);
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    const bodyStyle = TextStyle(fontSize: 19.0);
+
+    const pageDecoration = PageDecoration(
+      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: bodyStyle,
+      bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      pageColor: Colors.white,
+      imagePadding: EdgeInsets.zero,
+    );
+
+    return IntroductionScreen(
+      key: introKey,
+      globalBackgroundColor: Colors.white,
+      allowImplicitScrolling: true,
+      autoScrollDuration: 3000,
+      infiniteAutoScroll: true,
+      globalHeader: Align(
+        alignment: Alignment.topRight,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16, right: 16),
+            child: _buildImage('flutter.png', 100),
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      globalFooter: SizedBox(
+        width: double.infinity,
+        height: 60,
+        child: ElevatedButton(
+          child: const Text(
+            'Let\'s go right away!',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          onPressed: () => _onIntroEnd(context),
+        ),
+      ),
+      pages: [
+        PageViewModel(
+          title: "Fractional shares",
+          body:
+          "Instead of having to buy an entire share, invest any amount you want.",
+          image: _buildImage('img1.jpg'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Learn as you go",
+          body:
+          "Download the Stockpile app and master the market with our mini-lesson.",
+          image: _buildImage('img2.jpg'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Kids and teens",
+          body:
+          "Kids and teens can track their stocks 24/7 and place trades that you approve.",
+          image: _buildImage('img3.jpg'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Full Screen Page",
+          body:
+          "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+          image: _buildFullscreenImage(),
+          decoration: pageDecoration.copyWith(
+            contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+            fullScreen: true,
+            bodyFlex: 2,
+            imageFlex: 3,
+            safeArea: 100,
+          ),
+        ),
+        PageViewModel(
+          title: "Another title page",
+          body: "Another beautiful body text for this example onboarding",
+          image: _buildImage('img2.jpg'),
+          footer: ElevatedButton(
+            onPressed: () {
+              introKey.currentState?.animateScroll(0);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.lightBlue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+            child: const Text(
+              'FooButton',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          decoration: pageDecoration.copyWith(
+            bodyFlex: 6,
+            imageFlex: 6,
+            safeArea: 80,
+          ),
+        ),
+        PageViewModel(
+          title: "Title of last page - reversed",
+          bodyWidget: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Click on ", style: bodyStyle),
+              Icon(Icons.edit),
+              Text(" to edit a post", style: bodyStyle),
+            ],
+          ),
+          decoration: pageDecoration.copyWith(
+            bodyFlex: 2,
+            imageFlex: 4,
+            bodyAlignment: Alignment.bottomCenter,
+            imageAlignment: Alignment.topCenter,
+          ),
+          image: _buildImage('img1.jpg'),
+          reverse: true,
+        ),
+      ],
+      onDone: () => _onIntroEnd(context),
+      onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+      showSkipButton: true,
+      skipOrBackFlex: 0,
+      nextFlex: 0,
+      showBackButton: false,
+      //rtl: true, // Display as right-to-left
+      back: const Icon(Icons.arrow_back),
+      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+      next: const Icon(Icons.arrow_forward),
+      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      curve: Curves.fastLinearToSlowEaseIn,
+      controlsMargin: const EdgeInsets.all(16),
+      controlsPadding: kIsWeb
+          ? const EdgeInsets.all(12.0)
+          : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      dotsDecorator: const DotsDecorator(
+        size: Size(10.0, 10.0),
+        color: Color(0xFFBDBDBD),
+        activeSize: Size(22.0, 10.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        ),
+      ),
+      dotsContainerDecorator: const ShapeDecoration(
+        color: Colors.black87,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: const Center(child: Text("This is the screen after Introduction")),
     );
   }
 }
