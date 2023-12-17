@@ -41,7 +41,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
 
   Widget _buildFullscreenImage() {
     return Image.asset(
-      'assets/fullscreen.jpg',
+      'assets/images/fullscreen.jpg',
       fit: BoxFit.cover,
       height: double.infinity,
       width: double.infinity,
@@ -76,7 +76,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(top: 16, right: 16),
-            child: _buildImage('flutter.png', 100),
+            child: _buildImage('images/flutter.png', 100),
           ),
         ),
       ),
@@ -96,21 +96,21 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           title: "Fractional shares",
           body:
           "Instead of having to buy an entire share, invest any amount you want.",
-          image: _buildImage('img1.jpg'),
+          image: _buildFullscreenImage(),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Learn as you go",
           body:
           "Download the Stockpile app and master the market with our mini-lesson.",
-          image: _buildImage('img2.jpg'),
+          image: _buildImage('images/slider2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Kids and teens",
           body:
           "Kids and teens can track their stocks 24/7 and place trades that you approve.",
-          image: _buildImage('img3.jpg'),
+          image: _buildImage('images/slider1.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
@@ -129,7 +129,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Another title page",
           body: "Another beautiful body text for this example onboarding",
-          image: _buildImage('img2.jpg'),
+          image: _buildImage('images/slider2.jpg'),
           footer: ElevatedButton(
             onPressed: () {
               introKey.currentState?.animateScroll(0);
@@ -167,7 +167,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
             bodyAlignment: Alignment.bottomCenter,
             imageAlignment: Alignment.topCenter,
           ),
-          image: _buildImage('img1.jpg'),
+          image: _buildImage('images/slider1.jpg'),
           reverse: true,
         ),
       ],
