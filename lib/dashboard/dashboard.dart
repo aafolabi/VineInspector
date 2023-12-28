@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grapevine/dashboard/pages/analyzer/analyzer.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
 class Dashboard extends StatefulWidget {
@@ -18,12 +19,13 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  static const pages = [Analyzer(),Analyzer(),Analyzer()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         extendBody: true,
-      // body: pages[_currentIndex],
-        body: Text('My name is Samson'),
+        body: pages[_selectedIndex],
+        // body: Text('My name is Samson'),
         bottomNavigationBar: ResponsiveNavigationBar(
           selectedIndex: _selectedIndex,
           onTabChange: changeTab,
@@ -34,7 +36,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           navigationBarButtons: const <NavigationBarButton>[
             NavigationBarButton(
-              text: 'Tab 1',
+              text: 'Analyser',
               icon: Icons.people,
               backgroundGradient: LinearGradient(
                 colors: [Colors.yellow, Colors.green, Colors.blue],
