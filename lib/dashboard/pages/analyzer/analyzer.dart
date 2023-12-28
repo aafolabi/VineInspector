@@ -14,6 +14,8 @@ class Analyzer extends StatefulWidget {
 
 class _AnalyzerState extends State<Analyzer> {
   int currentStep = 0;
+  final codex = <String, dynamic>{};
+  final codex_array = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,22 +80,26 @@ class _AnalyzerState extends State<Analyzer> {
                     radiusStyle: true,
                     labels: ['WHITE', 'RED',],
                     onToggle: (index) {
-                      print('switched to: $index');
+                      var value =  index == 0 ? 'white' : 'red';
+                      codex.addAll({'qone':value});
+                      print(codex);
                     },
                   ),
-                  Text('What Type of Grape?'),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text('Is Harvesting Completed?'),
                   const SizedBox(
                     height: 10,
                   ),
                   ToggleSwitch(
                     initialLabelIndex: 0,
                     totalSwitches: 2,
-                    labels: [
-                      'WHITE',
-                      'RED',
-                    ],
+                    labels: ['YES','NO'],
                     onToggle: (index) {
-                      print('switched to: $index');
+                      var value =  index == 0 ? 'yes' : 'no';
+                      codex.addAll({'qtwo':value});
+                      print(codex);
                     },
                   ),
                 ],

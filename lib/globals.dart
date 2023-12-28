@@ -25,6 +25,8 @@ dynamic noChild;
 dynamic myContacts=[noChild];
 dynamic myRequests=[noChild];
 dynamic myPeers=[noChild];
+// dynamic codex = <String, dynamic>{};
+final global_codex = <String, dynamic>{};
 
 dynamic allRequests;
 var peers;
