@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_input.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_btn.dart';
+import 'package:grapevine/globals.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 
 class Analyzer extends StatefulWidget {
@@ -14,18 +16,17 @@ class _AnalyzerState extends State<Analyzer> {
   int currentStep = 0;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Stepper Widget ",
+          title: Text(
+            app_title,
           ),
           centerTitle: true,
         ),
         body: Container(
             padding: const EdgeInsets.all(20),
             child: Stepper(
-              type: StepperType.horizontal,
+              type: StepperType.vertical,
               currentStep: currentStep,
               onStepCancel: () => currentStep == 0
                   ? null
@@ -47,7 +48,6 @@ class _AnalyzerState extends State<Analyzer> {
               }),
               steps: getSteps(),
             )),
-      ),
     );
   }
 
@@ -56,16 +56,47 @@ class _AnalyzerState extends State<Analyzer> {
       Step(
         state: currentStep > 0 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 0,
-        title: const Text("Account Info"),
-        content: const Column(
+        title: const Text("Step 1"),
+        content: Column(
           children: [
-            CustomInput(
-              hint: "First Name",
-              inputBorder: OutlineInputBorder(),
-            ),
-            CustomInput(
-              hint: "Last Name",
-              inputBorder: OutlineInputBorder(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('What Type of Grape?'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ToggleSwitch(
+                    initialLabelIndex: 0,
+                    totalSwitches: 2,
+                    activeBgColors: [[Colors.green],[Colors.redAccent]],
+                    // borderColor: [Colors.redAccent, Colors.white],
+                    dividerColor: Colors.white,
+                    curve: Curves.bounceInOut,
+                    cornerRadius: 20.0,
+                    radiusStyle: true,
+                    labels: ['WHITE', 'RED',],
+                    onToggle: (index) {
+                      print('switched to: $index');
+                    },
+                  ),
+                  Text('What Type of Grape?'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ToggleSwitch(
+                    initialLabelIndex: 0,
+                    totalSwitches: 2,
+                    labels: [
+                      'WHITE',
+                      'RED',
+                    ],
+                    onToggle: (index) {
+                      print('switched to: $index');
+                    },
+                  ),
+                ],
             ),
           ],
         ),

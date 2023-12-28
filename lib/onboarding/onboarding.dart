@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import '../globals.dart';
+
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
@@ -63,11 +65,16 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         width: double.infinity,
         height: 60,
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: color1,
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+          ),
           child: const Text(
             'Let\'s go right away!',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           onPressed: () => _onIntroEnd(context),
+
         ),
       ),
       pages: [
@@ -114,7 +121,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
               introKey.currentState?.animateScroll(0);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.lightBlue,
+              backgroundColor: color1,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -157,10 +164,10 @@ class OnBoardingPageState extends State<OnBoardingPage> {
       nextFlex: 0,
       showBackButton: false,
       //rtl: true, // Display as right-to-left
-      back: const Icon(Icons.arrow_back),
-      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-      next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      back: const Icon(Icons.arrow_back, color:color1),
+      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600, color:color1)),
+      next: const Icon(Icons.arrow_forward, color:color1),
+      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600, color:color1)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb
@@ -168,7 +175,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
-        color: Color(0xFFBDBDBD),
+        color: color1,
         activeSize: Size(22.0, 10.0),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),

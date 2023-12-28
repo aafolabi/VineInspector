@@ -8,13 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool first_time = true;
 String baseUrl = 'https://padme-nwd6a.ondigitalocean.app/v1';
 
-const color1 = Color(0xFF36BA7A);
+const color1 = Color(0xFF358856);
+String app_title = "Grapevine";
 
 String fontFamily1 = "circular-std";
 
 double size1 = 18.0;
 
-SharedPreferences prefs;
+final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
 String email = "";
 String first_name = "";
 String last_name = "";

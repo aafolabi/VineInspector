@@ -6,6 +6,8 @@ import 'package:grapevine/onboarding/onboarding.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'globals.dart';
+
 void main() => runApp(const App());
 
 class App extends StatelessWidget {
@@ -18,9 +20,9 @@ class App extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'GrapeVine',
+      title: app_title,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.green),
       initialRoute: '/onboarding',
       onGenerateRoute: (settings) {
         switch (settings.name) {

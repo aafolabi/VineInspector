@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.2.2
   modal_progress_hud_nsn: ^0.4.0
   responsive_navigation_bar: ^4.0.4
+  toggle_switch: ^2.1.0
 
 dev_dependencies:
   flutter_test:
