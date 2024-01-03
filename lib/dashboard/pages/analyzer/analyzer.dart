@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_input.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_btn.dart';
 import 'package:grapevine/globals.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 
 
 class Analyzer extends StatefulWidget {
@@ -82,7 +84,6 @@ class _AnalyzerState extends State<Analyzer> {
                     onToggle: (index) {
                       var value =  index == 0 ? 'white' : 'red';
                       codex.addAll({'qone':value});
-                      print(codex);
                     },
                   ),
                   const SizedBox(
@@ -99,7 +100,6 @@ class _AnalyzerState extends State<Analyzer> {
                     onToggle: (index) {
                       var value =  index == 0 ? 'yes' : 'no';
                       codex.addAll({'qtwo':value});
-                      print(codex);
                     },
                   ),
                 ],
@@ -110,16 +110,48 @@ class _AnalyzerState extends State<Analyzer> {
       Step(
         state: currentStep > 1 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 1,
-        title: const Text("Address"),
-        content: const Column(
+        title: const Text("Step 2"),
+        content: Column(
           children: [
-            CustomInput(
-              hint: "City and State",
-              inputBorder: OutlineInputBorder(),
+            Text('Pre Veraison?'),
+            const SizedBox(
+              height: 10,
             ),
-            CustomInput(
-              hint: "Postal Code",
-              inputBorder: OutlineInputBorder(),
+            ToggleSwitch(
+              initialLabelIndex: 0,
+              totalSwitches: 2,
+              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              // borderColor: [Colors.redAccent, Colors.white],
+              dividerColor: Colors.white,
+              curve: Curves.bounceInOut,
+              cornerRadius: 20.0,
+              radiusStyle: true,
+              labels: ['YES', 'NO',],
+              onToggle: (index) {
+                var value =  index == 0 ? 'yes' : 'no';
+                codex.addAll({'qthree':value});
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text('Is this a recent observation?'),
+            const SizedBox(
+              height: 10,
+            ),
+            ToggleSwitch(
+              initialLabelIndex: 0,
+              totalSwitches: 2,
+              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              dividerColor: Colors.white,
+              curve: Curves.bounceInOut,
+              cornerRadius: 20.0,
+              radiusStyle: true,
+              labels: ['YES', 'NO',],
+              onToggle: (index) {
+                var value =  index == 0 ? 'yes' : 'no';
+                codex.addAll({'qfour':value});
+              },
             ),
           ],
         ),
@@ -127,12 +159,61 @@ class _AnalyzerState extends State<Analyzer> {
       Step(
         state: currentStep > 2 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 2,
-        title: const Text("Misc"),
-        content: const Column(
+        title: const Text("Step 3"),
+        content: Column(
           children: [
-            CustomInput(
-              hint: "Bio",
-              inputBorder: OutlineInputBorder(),
+            Text('Capture Date'),
+            const SizedBox(
+              height: 10,
+            ),
+            DateTimePicker(
+                initialValue: '',
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                dateLabelText: 'Date',
+                onChanged: (val) => codex.addAll({'qfive':val}),
+                validator: (val) {
+                  print(val);
+                  return null;
+                },
+                onSaved: (val) => codex.addAll({'qfive':val}),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('When last were you on the field before this observation?'),
+            DateTimePicker(
+                  initialValue: '',
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                  dateLabelText: 'Date',
+                  onChanged: (val) => codex.addAll({'qsix':val}),
+                  validator: (val) {
+                    print(val);
+                    return null;
+                  },
+                  onSaved: (val) => codex.addAll({'qsix':val}),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('Level of Incidence'),
+            const SizedBox(
+              height: 10,
+            ),
+            ToggleSwitch(
+              initialLabelIndex: 0,
+              totalSwitches: 2,
+              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              dividerColor: Colors.white,
+              curve: Curves.bounceInOut,
+              cornerRadius: 20.0,
+              radiusStyle: true,
+              labels: ['RANDOM PATCHES', 'UNIFORM',],
+              onToggle: (index) {
+                var value =  index == 0 ? 'random' : 'patches';
+                codex.addAll({'qseven':value});
+              },
             ),
           ],
         ),
@@ -141,7 +222,7 @@ class _AnalyzerState extends State<Analyzer> {
       Step(
         state: currentStep > 2 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 2,
-        title: const Text("Misc"),
+        title: const Text("Step 4"),
         content: Column(
           children: [
             CustomBtn(
