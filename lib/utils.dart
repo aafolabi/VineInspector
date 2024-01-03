@@ -18,7 +18,6 @@ class Utils {
   }
 
   void showLongToast(BuildContext context, var mssg) {
-
     Fluttertoast.showToast(
         msg: mssg.toString(),
         toastLength: Toast.LENGTH_LONG,
@@ -28,6 +27,12 @@ class Utils {
         textColor: Colors.white,
         fontSize: 16.0
     );
+  }
+
+  analyzer(dynamic codex){
+    if(codex['qone'] == 'white'){
+      return 3;
+    }
 
   }
 
