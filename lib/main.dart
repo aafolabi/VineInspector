@@ -2,13 +2,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grapevine/dashboard/dashboard.dart';
+import 'package:grapevine/dashboard/pages/analyzer/snapmail.dart';
 import 'package:grapevine/onboarding/onboarding.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'globals.dart';
+import 'package:camera/camera.dart';
 
-void main() => runApp(const App());
+
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  cameras = await availableCameras();
+  runApp(const App());
+}
+
+// void main() => runApp(const App());
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -36,6 +47,13 @@ class App extends StatelessWidget {
           case '/dashboard':
             return PageTransition(
               child: const Dashboard(),
+              type: PageTransitionType.rightToLeftWithFade,
+            );
+            break;
+
+          case '/snapmail':
+            return PageTransition(
+              child: const SnapMail(),
               type: PageTransitionType.rightToLeftWithFade,
             );
             break;

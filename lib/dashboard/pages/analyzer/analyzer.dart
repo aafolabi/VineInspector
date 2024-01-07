@@ -245,7 +245,7 @@ class _AnalyzerState extends State<Analyzer> {
   void analyze(){
     int result = ut.analyzer(codex);
     if(result == 3){
-
+      Navigator.pushReplacementNamed(context, '/snapmail');
     }
   }
 }
