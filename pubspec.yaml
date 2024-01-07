@@ -45,6 +45,8 @@ dependencies:
   responsive_navigation_bar: ^4.0.4
   toggle_switch: ^2.1.0
   date_time_picker: "^2.1.0"
+  camera: ^0.10.5+8
+#  flutter_email_sender: ^6.0.2
 
 dev_dependencies:
   flutter_test:

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_input.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_btn.dart';
 import 'package:grapevine/globals.dart';
+import 'package:grapevine/utils.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
+Utils ut = Utils();
 
 class Analyzer extends StatefulWidget {
   const Analyzer({Key? key}) : super(key: key);
@@ -84,6 +86,7 @@ class _AnalyzerState extends State<Analyzer> {
                     onToggle: (index) {
                       var value =  index == 0 ? 'white' : 'red';
                       codex.addAll({'qone':value});
+                      analyze();
                     },
                   ),
                   const SizedBox(
@@ -237,5 +240,12 @@ class _AnalyzerState extends State<Analyzer> {
 
       ),
     ];
+  }
+
+  void analyze(){
+    int result = ut.analyzer(codex);
+    if(result == 3){
+
+    }
   }
 }

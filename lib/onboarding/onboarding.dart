@@ -52,15 +52,15 @@ class OnBoardingPageState extends State<OnBoardingPage> {
       allowImplicitScrolling: true,
       autoScrollDuration: 3000,
       infiniteAutoScroll: true,
-      globalHeader: Align(
-        alignment: Alignment.topRight,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 16, right: 16),
-            child: _buildImage('images/flutter.png', 100),
-          ),
-        ),
-      ),
+      // globalHeader: Align(
+      //   alignment: Alignment.topRight,
+      //   child: SafeArea(
+      //     child: Padding(
+      //       padding: const EdgeInsets.only(top: 16, right: 16),
+      //       child: _buildImage('images/logo.png', 100),
+      //     ),
+      //   ),
+      // ),
       globalFooter: SizedBox(
         width: double.infinity,
         height: 60,
