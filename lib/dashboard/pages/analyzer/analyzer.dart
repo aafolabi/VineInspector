@@ -1,9 +1,14 @@
+
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_input.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_btn.dart';
 import 'package:grapevine/globals.dart';
 import 'package:grapevine/utils.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
@@ -247,5 +252,33 @@ class _AnalyzerState extends State<Analyzer> {
     if(result == 3){
       Navigator.pushReplacementNamed(context, '/snapmail');
     }
+  }
+
+  File? imageSelected;
+
+  void snapPhoto(BuildContext context) async{
+    await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 20).then((value) async {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: value!.path,
+        aspectRatioPresets: [CropAspectRatioPreset.square],
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Edit Photo',
+              toolbarColor: Colors.black,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          IOSUiSettings(title: 'Edit Photo'),
+          WebUiSettings(context: context),
+        ],
+      );
+
+      if (croppedFile != null){
+        imageSelected = File(croppedFile.path);
+        //Send to Mail
+      }
+      setState((){});
+    });
+
   }
 }
