@@ -79,9 +79,9 @@ class OnBoardingPageState extends State<OnBoardingPage> {
       ),
       pages: [
         PageViewModel(
-          title: "Full Screen Page",
+          title: "Start and Stay Clean",
           body:
-          "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+              "Start Clean & Stay Clean to manage grapevine virus diseases\n\nPlant only certified virus-free vines, monitor and manage insect vectors",
           image: _buildFullscreenImage(),
           decoration: pageDecoration.copyWith(
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),
@@ -92,30 +92,30 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           ),
         ),
         PageViewModel(
-          title: "Learn as you go",
+          title: "Keep your vines Healthy",
           body:
-          "Download the Stockpile app and master the market with our mini-lesson.",
+          "Identify Insect Vectors & keep them far from your vines",
           image: _buildImage('images/slider2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Kids and teens",
+          title: "Keep your vines Healthy",
           body:
           "Kids and teens can track their stocks 24/7 and place trades that you approve.",
           image: _buildImage('images/slider1.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Fractional shares",
+          title: "3-Cornered alfafa Hopper",
           body:
-          "Instead of having to buy an entire share, invest any amount you want.",
+          "The three-cornered alfalfa hopper is a vector for grapevine red blotch virus",
           image: _buildFullscreenImage(),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Full Screen Page",
+          title: "Virus-Free Vine",
           body:
-          "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+              "A Virus-free vine is the most important investment that you can make during vineyard establishment",
           image: _buildFullscreenImage(),
           decoration: pageDecoration.copyWith(
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),

@@ -9,8 +9,11 @@ import 'package:grapevine/globals.dart';
 import 'package:grapevine/utils.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mailer/smtp_server.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:mailer/mailer.dart';
+
 
 Utils ut = Utils();
 
@@ -79,7 +82,7 @@ class _AnalyzerState extends State<Analyzer> {
                     height: 10,
                   ),
                   ToggleSwitch(
-                    initialLabelIndex: 0,
+                    initialLabelIndex: null,
                     totalSwitches: 2,
                     activeBgColors: [[Colors.green],[Colors.redAccent]],
                     // borderColor: [Colors.redAccent, Colors.white],
@@ -102,7 +105,7 @@ class _AnalyzerState extends State<Analyzer> {
                     height: 10,
                   ),
                   ToggleSwitch(
-                    initialLabelIndex: 0,
+                    initialLabelIndex: null,
                     totalSwitches: 2,
                     labels: ['YES','NO'],
                     onToggle: (index) {
@@ -126,7 +129,7 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: 0,
+              initialLabelIndex: null,
               totalSwitches: 2,
               activeBgColors: [[Colors.green],[Colors.redAccent]],
               // borderColor: [Colors.redAccent, Colors.white],
@@ -148,7 +151,7 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: 0,
+              initialLabelIndex: null,
               totalSwitches: 2,
               activeBgColors: [[Colors.green],[Colors.redAccent]],
               dividerColor: Colors.white,
@@ -210,7 +213,7 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: 0,
+              initialLabelIndex: null,
               totalSwitches: 2,
               activeBgColors: [[Colors.green],[Colors.redAccent]],
               dividerColor: Colors.white,
@@ -257,7 +260,8 @@ class _AnalyzerState extends State<Analyzer> {
   File? imageSelected;
 
   void snapPhoto(BuildContext context) async{
-    await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 20).then((value) async {
+    await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 40,
+        preferredCameraDevice: CameraDevice.rear).then((value) async {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: value!.path,
         aspectRatioPresets: [CropAspectRatioPreset.square],
@@ -275,10 +279,45 @@ class _AnalyzerState extends State<Analyzer> {
 
       if (croppedFile != null){
         imageSelected = File(croppedFile.path);
-        //Send to Mail
+        sendEmail();
       }
       setState((){});
     });
 
+  }
+
+  Future sendEmail() async {
+    const sender = "csamsonok@gmail.com";
+    // final smtpServer = gmail(username, password);
+    // Use the SmtpServer class to configure an SMTP server:
+    final smtpServer = SmtpServer('sandbox.smtp.mailtrap.io', username: "bdf0feede7016c", password: "c6219fe725e806");
+
+    // See the named arguments of SmtpServer for further configuration
+    // options.
+
+    // Create our message.
+    final message = Message()
+      ..from = Address(sender, 'GrapeVine App')
+      ..recipients.add('afolabi.agbona@ag.tamu.edu')
+      // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
+      // ..bccRecipients.add(Address('bccAddress@example.com'))
+      ..subject = 'Grapevine Analysis :: 😀 :: ${DateTime.now()}'
+      ..text = 'Hello, here is an image for.\nGrape vine LeafRoll Analysis.'
+      // ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
+      ..attachments = [
+        FileAttachment(imageSelected!)  //For Adding Attachments
+          ..location = Location.inline
+          ..cid = '<myimg@3.141>'
+     ];
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
   }
 }
