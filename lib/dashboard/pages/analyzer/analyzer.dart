@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grapevine/dashboard/pages/analyzer/custom_input.dart';
@@ -61,6 +62,7 @@ class _AnalyzerState extends State<Analyzer> {
                 currentStep = step;
               }),
               steps: getSteps(),
+
             )),
     );
   }
@@ -94,7 +96,8 @@ class _AnalyzerState extends State<Analyzer> {
                     onToggle: (index) {
                       var value =  index == 0 ? 'white' : 'red';
                       codex.addAll({'qone':value});
-                      analyze();
+                      // analyze();
+                      if(index == 0) snapPhoto(context);
                     },
                   ),
                   const SizedBox(
@@ -107,9 +110,14 @@ class _AnalyzerState extends State<Analyzer> {
                   ToggleSwitch(
                     initialLabelIndex: null,
                     totalSwitches: 2,
+                    dividerColor: Colors.white,
+                    curve: Curves.bounceInOut,
+                    cornerRadius: 20.0,
+                    radiusStyle: true,
                     labels: ['YES','NO'],
                     onToggle: (index) {
                       var value =  index == 0 ? 'yes' : 'no';
+                      if(index == 0) snapPhoto(context);
                       codex.addAll({'qtwo':value});
                     },
                   ),
@@ -141,6 +149,7 @@ class _AnalyzerState extends State<Analyzer> {
               onToggle: (index) {
                 var value =  index == 0 ? 'yes' : 'no';
                 codex.addAll({'qthree':value});
+                if(index == 0) snapPhoto(context);
               },
             ),
             const SizedBox(
@@ -162,6 +171,7 @@ class _AnalyzerState extends State<Analyzer> {
               onToggle: (index) {
                 var value =  index == 0 ? 'yes' : 'no';
                 codex.addAll({'qfour':value});
+                if(index == 1) snapPhoto(context);
               },
             ),
           ],
@@ -203,7 +213,11 @@ class _AnalyzerState extends State<Analyzer> {
                     print(val);
                     return null;
                   },
-                  onSaved: (val) => codex.addAll({'qsix':val}),
+                  onSaved: (val) {
+                    codex.addAll({'qsix':val});
+                    //Calculate D1-D2 here
+
+                  }
             ),
             const SizedBox(
               height: 10,
@@ -253,7 +267,8 @@ class _AnalyzerState extends State<Analyzer> {
   void analyze(){
     int result = ut.analyzer(codex);
     if(result == 3){
-      Navigator.pushReplacementNamed(context, '/snapmail');
+      snapPhoto(context);
+      // Navigator.pushReplacementNamed(context, '/snapmail');
     }
   }
 
@@ -286,7 +301,7 @@ class _AnalyzerState extends State<Analyzer> {
 
   }
 
-  Future sendEmail() async {
+  sendEmail()  {
     const sender = "csamsonok@gmail.com";
     // final smtpServer = gmail(username, password);
     // Use the SmtpServer class to configure an SMTP server:
@@ -311,7 +326,7 @@ class _AnalyzerState extends State<Analyzer> {
      ];
 
     try {
-      final sendReport = await send(message, smtpServer);
+      final sendReport =  send(message, smtpServer);
       print('Message sent: ' + sendReport.toString());
     } on MailerException catch (e) {
       print('Message not sent.');
@@ -319,5 +334,16 @@ class _AnalyzerState extends State<Analyzer> {
         print('Problem: ${p.code}: ${p.msg}');
       }
     }
+
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.success,
+      text: "Unable to Send Image",
+    );
+
+    //reload page
+    setState(() {
+      codex.clear();
+    });
   }
 }
