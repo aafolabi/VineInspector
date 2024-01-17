@@ -62,9 +62,14 @@ class _AnalyzerState extends State<Analyzer> {
                   });
                 }
               },
-              onStepTapped: (step) => setState(() {
-                currentStep = step;
-              }),
+              // onStepTapped: (step) => setState(() {
+              //   currentStep = step;
+              // }),
+              onStepTapped: (int index) {
+                if (currentStep != index) {
+                  currentStep = currentStep;
+                }
+              },
               controlsBuilder: (context,_) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
