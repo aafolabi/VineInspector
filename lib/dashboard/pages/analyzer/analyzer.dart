@@ -65,6 +65,53 @@ class _AnalyzerState extends State<Analyzer> {
               onStepTapped: (step) => setState(() {
                 currentStep = step;
               }),
+              controlsBuilder: (context,_) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    // TextButton(
+                    //   onPressed: (){},
+                    //   child: const Text('NEXT'),
+                    // ),
+                    IconButton(
+                      iconSize: 50,
+                      icon: const Icon(
+                        Icons.arrow_back,
+                      ),
+                      color: color1,
+                      // the method which is called
+                      // when button is pressed
+                      onPressed: () => currentStep == 0
+                          ? null
+                          : setState(() {
+                        currentStep -= 1;
+                      }),
+                    ),
+                    // SizedBox used as the separator
+                    const SizedBox(
+                      width: 80,
+                    ),
+                    IconButton(
+                      iconSize: 50,
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                      ),
+                      color: color1,
+                      onPressed: () {
+                        bool isLastStep = (currentStep == getSteps().length - 1);
+                        if (isLastStep) {
+                          //Do something with this information
+                        } else {
+                          setState(() {
+                            currentStep += 1;
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                );
+              },
+
               steps: getSteps(),
 
             )),
@@ -237,6 +284,16 @@ class _AnalyzerState extends State<Analyzer> {
                     //Calculate D1-D2 here
                   }
             ),
+          ],
+        ),
+
+      ),
+      Step(
+        state: currentStep > 3 ? StepState.complete : StepState.indexed,
+        isActive: currentStep >= 3,
+        title: const Text("Step 4"),
+        content: Column(
+          children: [
             const SizedBox(
               height: 10,
             ),
@@ -247,6 +304,7 @@ class _AnalyzerState extends State<Analyzer> {
             ToggleSwitch(
               initialLabelIndex: null,
               totalSwitches: 2,
+              minWidth: 120.0,
               activeBgColors: [[Colors.green],[Colors.redAccent]],
               dividerColor: Colors.white,
               curve: Curves.bounceInOut,
@@ -261,6 +319,15 @@ class _AnalyzerState extends State<Analyzer> {
                 }
               },
             ),
+          ],
+        ),
+      ),
+      Step(
+        state: currentStep > 4 ? StepState.complete : StepState.indexed,
+        isActive: currentStep >= 4,
+        title: const Text("Step 5"),
+        content: Column(
+          children: [
             const SizedBox(
               height: 10,
             ),
@@ -319,6 +386,7 @@ class _AnalyzerState extends State<Analyzer> {
             ToggleSwitch(
               initialLabelIndex: null,
               totalSwitches: 2,
+              minWidth: 90.0,
               activeBgColors: [[Colors.green],[Colors.redAccent]],
               dividerColor: Colors.white,
               curve: Curves.bounceInOut,
@@ -338,12 +406,11 @@ class _AnalyzerState extends State<Analyzer> {
             ),
           ],
         ),
-
       ),
       Step(
-        state: currentStep > 2 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 2,
-        title: const Text("Step 4"),
+        state: currentStep > 5 ? StepState.complete : StepState.indexed,
+        isActive: currentStep >= 5,
+        title: const Text("Step 6"),
         content: Column(
           children: [
             CustomBtn(
