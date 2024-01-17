@@ -29,6 +29,10 @@ class _AnalyzerState extends State<Analyzer> {
   int currentStep = 0;
   final codex = <String, dynamic>{};
   final codex_array = [];
+  // DateTime? capture_date = null;
+  // DateTime? last_visit_date = null;
+  String capture_date = '';
+  String last_visit_date = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,7 +196,11 @@ class _AnalyzerState extends State<Analyzer> {
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2100),
                 dateLabelText: 'Date',
-                onChanged: (val) => codex.addAll({'qfive':val}),
+                onChanged: (val) {
+                  codex.addAll({'qfive':val});
+                  capture_date = val;
+                },
+                // onChanged: (val) => codex.addAll({'qfive':val}),
                 validator: (val) {
                   print(val);
                   return null;
@@ -208,7 +216,18 @@ class _AnalyzerState extends State<Analyzer> {
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2100),
                   dateLabelText: 'Date',
-                  onChanged: (val) => codex.addAll({'qsix':val}),
+                  onChanged: (val) {
+                    codex.addAll({'qsix':val});
+                    DateTime last_visit_date_x = DateTime.parse(val);
+                    DateTime capture_date_x = DateTime.parse(capture_date);
+                    if(capture_date_x != null && last_visit_date_x != null){
+                      int diff = capture_date_x.difference(last_visit_date_x).inDays;
+                      if(diff <=2 ){
+                        showLowLikely();
+                      }
+                    }
+                  },
+                  // onChanged: (val) => codex.addAll({'qsix':val}),
                   validator: (val) {
                     print(val);
                     return null;
@@ -216,7 +235,6 @@ class _AnalyzerState extends State<Analyzer> {
                   onSaved: (val) {
                     codex.addAll({'qsix':val});
                     //Calculate D1-D2 here
-
                   }
             ),
             const SizedBox(
@@ -238,6 +256,84 @@ class _AnalyzerState extends State<Analyzer> {
               onToggle: (index) {
                 var value =  index == 0 ? 'random' : 'patches';
                 codex.addAll({'qseven':value});
+                if(index == 0){
+                  showDisease();
+                }
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('Do you observe Insect, mealy bugs?'),
+            const SizedBox(
+              height: 10,
+            ),
+            ToggleSwitch(
+              initialLabelIndex: null,
+              totalSwitches: 2,
+              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              dividerColor: Colors.white,
+              curve: Curves.bounceInOut,
+              cornerRadius: 20.0,
+              radiusStyle: true,
+              labels: ['YES', 'NO',],
+              onToggle: (index) {
+                var value =  index == 0 ? 'yes' : 'no';
+                codex.addAll({'qeight':value});
+                if(index == 1){
+                  showNutrientDeficiency();
+                }
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('Are there Vineyards close to you?'),
+            const SizedBox(
+              height: 10,
+            ),
+            ToggleSwitch(
+              initialLabelIndex: null,
+              totalSwitches: 2,
+              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              dividerColor: Colors.white,
+              curve: Curves.bounceInOut,
+              cornerRadius: 20.0,
+              radiusStyle: true,
+              labels: ['YES', 'NO',],
+              onToggle: (index) {
+                var value =  index == 0 ? 'yes' : 'no';
+                codex.addAll({'qnine':value});
+                if(index == 0){
+                  showDisease();
+                }
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('Source of Planting Materials'),
+            const SizedBox(
+              height: 10,
+            ),
+            ToggleSwitch(
+              initialLabelIndex: null,
+              totalSwitches: 2,
+              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              dividerColor: Colors.white,
+              curve: Curves.bounceInOut,
+              cornerRadius: 20.0,
+              radiusStyle: true,
+              labels: ['CLEAN', 'OTHERS',],
+              onToggle: (index) {
+                var value =  index == 0 ? 'clean' : 'others';
+                codex.addAll({'qten':value});
+                if(index == 0){
+                  showNutrientDeficiency();
+                }
+                else{
+                  showDisease();
+                }
               },
             ),
           ],
@@ -346,4 +442,39 @@ class _AnalyzerState extends State<Analyzer> {
       codex.clear();
     });
   }
+
+  showLowLikely() {
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.success,
+      text: 'There is Low Likelihood it is a vineyard disease'
+    );
+    setState(() {
+      codex.clear();
+    });
+  }
+
+  showNutrientDeficiency(){
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.success,
+      text: 'It is Nutrient Deficiency Related. ZERO WORRIES'
+    );
+    setState(() {
+      codex.clear();
+    });
+  }
+
+  showDisease(){
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.success,
+      text: 'You have DISEASE'
+    );
+    setState(() {
+      codex.clear();
+    });
+  }
+
+
 }
