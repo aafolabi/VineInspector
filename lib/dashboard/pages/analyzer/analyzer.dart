@@ -281,7 +281,7 @@ class _AnalyzerState extends State<Analyzer> {
                 var value =  index == 0 ? 'yes' : 'no';
                 codex.addAll({'qeight':value});
                 if(index == 1){
-                  showNutrientDeficiency();
+                  showLowLikely();
                 }
               },
             ),
@@ -329,7 +329,7 @@ class _AnalyzerState extends State<Analyzer> {
                 var value =  index == 0 ? 'clean' : 'others';
                 codex.addAll({'qten':value});
                 if(index == 0){
-                  showNutrientDeficiency();
+                  showLowLikely();
                 }
                 else{
                   showDisease();
@@ -447,23 +447,13 @@ class _AnalyzerState extends State<Analyzer> {
     CoolAlert.show(
       context: context,
       type: CoolAlertType.success,
-      text: 'There is Low Likelihood it is a vineyard disease'
+      text: 'There is Low Likelihood it is a vineyard disease\n\nIt is Nutrient Deficiency Related. ZERO WORRIES'
     );
     setState(() {
       codex.clear();
     });
   }
 
-  showNutrientDeficiency(){
-    CoolAlert.show(
-      context: context,
-      type: CoolAlertType.success,
-      text: 'It is Nutrient Deficiency Related. ZERO WORRIES'
-    );
-    setState(() {
-      codex.clear();
-    });
-  }
 
   showDisease(){
     CoolAlert.show(
