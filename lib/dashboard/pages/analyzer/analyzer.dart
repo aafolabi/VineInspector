@@ -239,7 +239,7 @@ class _AnalyzerState extends State<Analyzer> {
         title: const Text("Step 3"),
         content: Column(
           children: [
-            Text('Capture Date'),
+            Text('Observation Date'),
             const SizedBox(
               height: 10,
             ),
@@ -302,7 +302,7 @@ class _AnalyzerState extends State<Analyzer> {
             const SizedBox(
               height: 10,
             ),
-            Text('Level of Incidence'),
+            Text('Disease pattern in the vineyard'),
             const SizedBox(
               height: 10,
             ),
@@ -336,54 +336,6 @@ class _AnalyzerState extends State<Analyzer> {
             const SizedBox(
               height: 10,
             ),
-            Text('Do you observe Insect, mealy bugs?'),
-            const SizedBox(
-              height: 10,
-            ),
-            ToggleSwitch(
-              initialLabelIndex: null,
-              totalSwitches: 2,
-              activeBgColors: [[Colors.green],[Colors.redAccent]],
-              dividerColor: Colors.white,
-              curve: Curves.bounceInOut,
-              cornerRadius: 20.0,
-              radiusStyle: true,
-              labels: ['YES', 'NO',],
-              onToggle: (index) {
-                var value =  index == 0 ? 'yes' : 'no';
-                codex.addAll({'qeight':value});
-                if(index == 1){
-                  showLowLikely();
-                }
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text('Are there Vineyards close to you?'),
-            const SizedBox(
-              height: 10,
-            ),
-            ToggleSwitch(
-              initialLabelIndex: null,
-              totalSwitches: 2,
-              activeBgColors: [[Colors.green],[Colors.redAccent]],
-              dividerColor: Colors.white,
-              curve: Curves.bounceInOut,
-              cornerRadius: 20.0,
-              radiusStyle: true,
-              labels: ['YES', 'NO',],
-              onToggle: (index) {
-                var value =  index == 0 ? 'yes' : 'no';
-                codex.addAll({'qnine':value});
-                if(index == 0){
-                  showDisease();
-                }
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
             Text('Source of Planting Materials'),
             const SizedBox(
               height: 10,
@@ -411,23 +363,6 @@ class _AnalyzerState extends State<Analyzer> {
             ),
           ],
         ),
-      ),
-      Step(
-        state: currentStep > 5 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 5,
-        title: const Text("Step 6"),
-        content: Column(
-          children: [
-            CustomBtn(
-              title: const Text(
-                "Save",
-                style: TextStyle(color: Colors.white),
-              ),
-              callback: () {},
-            )
-          ],
-        ),
-
       ),
     ];
   }
@@ -518,8 +453,8 @@ class _AnalyzerState extends State<Analyzer> {
   showLowLikely() {
     CoolAlert.show(
       context: context,
-      type: CoolAlertType.success,
-      text: 'There is Low Likelihood it is a vineyard disease\n\nIt is Nutrient Deficiency Related. ZERO WORRIES'
+      type: CoolAlertType.info,
+      text: ' Disease Unlikely, check for Nutrient Deficiency'
     );
     setState(() {
       codex.clear();
@@ -531,7 +466,7 @@ class _AnalyzerState extends State<Analyzer> {
     CoolAlert.show(
       context: context,
       type: CoolAlertType.success,
-      text: 'You have DISEASE'
+      text: 'Possible case of disease, vine testing recommended'
     );
     setState(() {
       codex.clear();

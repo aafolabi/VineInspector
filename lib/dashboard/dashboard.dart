@@ -43,14 +43,21 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             NavigationBarButton(
-              text: 'Tab 2',
+              text: 'Guide',
               icon: Icons.star,
               backgroundGradient: LinearGradient(
                 colors: [Colors.cyan, Colors.teal],
               ),
             ),
             NavigationBarButton(
-              text: 'Tab 3',
+              text: 'Gallery',
+              icon: Icons.settings,
+              backgroundGradient: LinearGradient(
+                colors: [Colors.green, Colors.yellow],
+              ),
+            ),
+            NavigationBarButton(
+              text: 'About',
               icon: Icons.settings,
               backgroundGradient: LinearGradient(
                 colors: [Colors.green, Colors.yellow],

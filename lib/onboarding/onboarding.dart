@@ -92,21 +92,21 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           ),
         ),
         PageViewModel(
-          title: "Keep your vines Healthy",
+          title: "Got Leaf Roll?",
           body:
-          "Identify Insect Vectors & keep them far from your vines",
+          "Leaf rolls are destructive and can impact yield and fruit quality.",
           image: _buildImage('images/slider2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Keep your vines Healthy",
+          title: "Got Red Blotch?",
           body:
-          "Kids and teens can track their stocks 24/7 and place trades that you approve.",
+          "Red blotches are destructive and can impact yield and fruit quality.",
           image: _buildImage('images/slider1.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "3-Cornered alfafa Hopper",
+          title: "Insect Vector",
           body:
           "The three-cornered alfalfa hopper is a vector for grapevine red blotch virus",
           image: _buildFullscreenImage(),
