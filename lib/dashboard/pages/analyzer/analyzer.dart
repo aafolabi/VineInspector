@@ -11,6 +11,7 @@ import 'package:grapevine/utils.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:mailer/smtp_server/sendgrid.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:mailer/mailer.dart';
@@ -33,10 +34,18 @@ class _AnalyzerState extends State<Analyzer> {
   // DateTime? last_visit_date = null;
   String capture_date = '';
   String last_visit_date = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // sendEmail();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: color1,
           title: Text(
             app_title,
           ),
@@ -405,11 +414,11 @@ class _AnalyzerState extends State<Analyzer> {
   }
 
   sendEmail()  {
-    const sender = "csamsonok@gmail.com";
+    const sender = "info@vineinspector.com";
     // final smtpServer = gmail(username, password);
     // Use the SmtpServer class to configure an SMTP server:
-    final smtpServer = SmtpServer('sandbox.smtp.mailtrap.io', username: "bdf0feede7016c", password: "c6219fe725e806");
-
+    // final smtpServer = SmtpServer('sandbox.smtp.mailtrap.io', username: "bdf0feede7016c", password: "c6219fe725e806");
+    final smtpServer = sendgrid('C-Spydo', '?E49UvFb7sjXipSXYZ');
     // See the named arguments of SmtpServer for further configuration
     // options.
 
@@ -417,16 +426,17 @@ class _AnalyzerState extends State<Analyzer> {
     final message = Message()
       ..from = Address(sender, 'GrapeVine App')
       ..recipients.add('afolabi.agbona@ag.tamu.edu')
-      // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
+      ..ccRecipients.addAll(['csamsonok@gmail.com', 'afolabi.agbona@gmail.com'])
       // ..bccRecipients.add(Address('bccAddress@example.com'))
       ..subject = 'Grapevine Analysis :: 😀 :: ${DateTime.now()}'
       ..text = 'Hello, here is an image for.\nGrape vine LeafRoll Analysis.'
       // ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
-      ..attachments = [
-        FileAttachment(imageSelected!)  //For Adding Attachments
-          ..location = Location.inline
-          ..cid = '<myimg@3.141>'
-     ];
+     //  ..attachments = [
+     //    FileAttachment(imageSelected!)  //For Adding Attachments
+     //      ..location = Location.inline
+     //      ..cid = '<myimg@3.141>'
+     // ]
+    ;
 
     try {
       final sendReport =  send(message, smtpServer);

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:grapevine/dashboard/pages/about/about.dart';
 import 'package:grapevine/dashboard/pages/analyzer/analyzer.dart';
+import 'package:grapevine/dashboard/pages/gallery/gallery.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
+
+import '../globals.dart';
 
 class Dashboard extends StatefulWidget {
   ///
@@ -19,7 +23,7 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  static const pages = [Analyzer(),Analyzer(),Analyzer()];
+  static const pages = [Analyzer(),Analyzer(),Gallery(),About()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,31 +41,23 @@ class _DashboardState extends State<Dashboard> {
           navigationBarButtons: const <NavigationBarButton>[
             NavigationBarButton(
               text: 'Analyser',
-              icon: Icons.people,
-              backgroundGradient: LinearGradient(
-                colors: [Colors.yellow, Colors.green, Colors.blue],
-              ),
+              icon: Icons.account_tree_rounded,
+              backgroundColor: color1,
             ),
             NavigationBarButton(
               text: 'Guide',
-              icon: Icons.star,
-              backgroundGradient: LinearGradient(
-                colors: [Colors.cyan, Colors.teal],
-              ),
+              icon: Icons.book,
+              backgroundColor: color1,
             ),
             NavigationBarButton(
               text: 'Gallery',
-              icon: Icons.settings,
-              backgroundGradient: LinearGradient(
-                colors: [Colors.green, Colors.yellow],
-              ),
+              icon: Icons.photo_album,
+              backgroundColor: color1,
             ),
             NavigationBarButton(
               text: 'About',
-              icon: Icons.settings,
-              backgroundGradient: LinearGradient(
-                colors: [Colors.green, Colors.yellow],
-              ),
+              icon: Icons.info,
+              backgroundColor: color1,
             ),
           ],
         ),

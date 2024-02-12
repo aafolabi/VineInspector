@@ -102,21 +102,21 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           title: "Got Red Blotch?",
           body:
           "Red blotches are destructive and can impact yield and fruit quality.",
-          image: _buildImage('images/slider1.jpg'),
+          image: _buildImage('images/slider_3a_leafroll.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Insect Vector",
           body:
           "The three-cornered alfalfa hopper is a vector for grapevine red blotch virus",
-          image: _buildFullscreenImage(),
+          image: _buildImage('images/slider_3b_red_blotch.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Virus-Free Vine",
           body:
               "A Virus-free vine is the most important investment that you can make during vineyard establishment",
-          image: _buildFullscreenImage(),
+          image: _buildImage('images/slider_4.jpg'),
           decoration: pageDecoration.copyWith(
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),
             fullScreen: true,
