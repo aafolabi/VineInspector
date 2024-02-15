@@ -4,17 +4,15 @@ import 'dart:io';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grapevine/dashboard/pages/analyzer/custom_input.dart';
-import 'package:grapevine/dashboard/pages/analyzer/custom_btn.dart';
 import 'package:grapevine/globals.dart';
 import 'package:grapevine/utils.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mailer/smtp_server.dart';
-import 'package:mailer/smtp_server/sendgrid.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:mailer/mailer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'package:geolocator/geolocator.dart';
 
 
 Utils ut = Utils();
@@ -34,6 +32,7 @@ class _AnalyzerState extends State<Analyzer> {
   // DateTime? last_visit_date = null;
   String capture_date = '';
   String last_visit_date = '';
+  bool loading=false;
 
   @override
   void initState() {
@@ -380,7 +379,6 @@ class _AnalyzerState extends State<Analyzer> {
     int result = ut.analyzer(codex);
     if(result == 3){
       snapPhoto(context);
-      // Navigator.pushReplacementNamed(context, '/snapmail');
     }
   }
 
@@ -413,49 +411,72 @@ class _AnalyzerState extends State<Analyzer> {
 
   }
 
-  sendEmail()  {
-    const sender = "info@vineinspector.com";
-    // final smtpServer = gmail(username, password);
-    // Use the SmtpServer class to configure an SMTP server:
-    // final smtpServer = SmtpServer('sandbox.smtp.mailtrap.io', username: "bdf0feede7016c", password: "c6219fe725e806");
-    final smtpServer = sendgrid('C-Spydo', '?E49UvFb7sjXipSXYZ');
-    // See the named arguments of SmtpServer for further configuration
-    // options.
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-    // Create our message.
-    final message = Message()
-      ..from = Address(sender, 'GrapeVine App')
-      ..recipients.add('afolabi.agbona@ag.tamu.edu')
-      ..ccRecipients.addAll(['csamsonok@gmail.com', 'afolabi.agbona@gmail.com'])
-      // ..bccRecipients.add(Address('bccAddress@example.com'))
-      ..subject = 'Grapevine Analysis :: 😀 :: ${DateTime.now()}'
-      ..text = 'Hello, here is an image for.\nGrape vine LeafRoll Analysis.'
-      // ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
-     //  ..attachments = [
-     //    FileAttachment(imageSelected!)  //For Adding Attachments
-     //      ..location = Location.inline
-     //      ..cid = '<myimg@3.141>'
-     // ]
-    ;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
 
-    try {
-      final sendReport =  send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
-    } on MailerException catch (e) {
-      print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permantly denied, we cannot request permissions.');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
       }
     }
 
-    CoolAlert.show(
-      context: context,
-      type: CoolAlertType.success,
-      text: "Unable to Send Image",
-    );
+    return await Geolocator.getCurrentPosition();
+  }
+
+
+  Future sendEmail() async  {
+
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      Position pos=await _determinePosition();
+      var body = {
+        "email": email,
+        "lat": pos.latitude,
+        "long": pos.longitude,
+        "image": "",
+      };
+
+      http.Response response = await ut.apiRequest(
+          "/exchange/recieve", "POST", body);
+      if (response.statusCode == 200) {
+        ut.showToast(context, "Successful");
+      }
+      else {
+        ut.showToast(context, "Failed");
+      }
+    }
+    catch(e){
+      print("PadrEx "+e.toString());
+    }
+
+    // CoolAlert.show(
+    //   context: context,
+    //   type: CoolAlertType.success,
+    //   text: "Unable to Send Image",
+    // );
+
 
     //reload page
     setState(() {
+      loading = false;
       codex.clear();
     });
   }

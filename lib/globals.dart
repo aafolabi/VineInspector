@@ -16,24 +16,10 @@ String fontFamily1 = "circular-std";
 
 double size1 = 18.0;
 
-final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 String email = "";
-String first_name = "";
-String last_name = "";
-String phone_number = "";
 
-dynamic noChild;
-dynamic myContacts=[noChild];
-dynamic myRequests=[noChild];
-dynamic myPeers=[noChild];
-// dynamic codex = <String, dynamic>{};
 final global_codex = <String, dynamic>{};
-
-dynamic allRequests;
-var peers;
-String unique_id="";
-
-
 
 double deviceWidth = 0;
 double deviceHeight = 0;

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../globals.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class OnBoardingPage extends StatefulWidget {
@@ -15,7 +17,65 @@ class OnBoardingPage extends StatefulWidget {
 class OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
-  void _onIntroEnd(context) {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+  getPermissions()async{
+    var btp = await Permission.location.status;
+    if (!btp.isGranted) {
+      Permission.location.request();
+    }
+
+  }
+
+  void _onIntroEnd(context) async {
+    await getPermissions();
+
+    final SharedPreferences prefs = await _prefs;
+    first_time = prefs.getBool("first_time")!;
+    if(first_time == true){
+      //Collect user Email here and Save
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            var emailController = TextEditingController();
+            return AlertDialog(
+              scrollable: true,
+              title: Text('Hello'),
+              content: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Enter your Email',
+                          hintText: 'Enter your email Address',
+                          icon: Icon(Icons.email),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                    child: Text("Submit"),
+                    onPressed: () {
+                      prefs.setBool("first_time", false);
+                      prefs.setString("email", emailController.text)
+                    })
+              ],
+            );
+          });
+    }
+
+    email = prefs.getString("email")!;
     Navigator.pushReplacementNamed(context, '/dashboard');
     // Navigator.pushNamed(context, '/dashboard');
   }
