@@ -53,5 +53,8 @@
     <key>NSMicrophoneUsageDescription</key>
     <string>your usage description here</string>
 
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>This app needs access to location when open.</string>
+
 </dict>
 </plist>

@@ -20,8 +20,6 @@ class Utils {
       if (method == "GET") {
         res = await http.get(url, headers: headers);
       } else if (method == "POST") {
-        print('The body that got here');
-        print(body['file'].toString());
         res = await http.post(url, headers: headers, body: body);
       } else if (method == "PUT") {
         res = await http.put(url, headers: headers, body: body);

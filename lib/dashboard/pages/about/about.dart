@@ -7,7 +7,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../globals.dart';
 
-
 class About extends StatefulWidget {
   const About({Key? key}) : super(key: key);
 
@@ -107,6 +106,7 @@ class AboutState extends State<About> {
         backgroundColor: color1,
         title: Text(
           app_title,
+          style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),

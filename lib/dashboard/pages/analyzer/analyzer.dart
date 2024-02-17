@@ -5,6 +5,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grapevine/globals.dart';
+import 'package:grapevine/loading.dart';
 import 'package:grapevine/utils.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,92 +41,96 @@ class _AnalyzerState extends State<Analyzer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: color1,
-        title: Text(
-          app_title,
-        ),
-        centerTitle: true,
-      ),
-      body: Container(
-          padding: const EdgeInsets.all(20),
-          child: Stepper(
-            type: StepperType.vertical,
-            currentStep: currentStep,
-            onStepCancel: () => currentStep == 0
-                ? null
-                : setState(() {
-                    currentStep -= 1;
-                  }),
-            onStepContinue: () {
-              bool isLastStep = (currentStep == getSteps().length - 1);
-              if (isLastStep) {
-                //Do something with this information
-              } else {
-                setState(() {
-                  currentStep += 1;
-                });
-              }
-            },
-            // onStepTapped: (step) => setState(() {
-            //   currentStep = step;
-            // }),
-            onStepTapped: (int index) {
-              if (currentStep != index) {
-                currentStep = currentStep;
-              }
-            },
-            controlsBuilder: (context, _) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // TextButton(
-                  //   onPressed: (){},
-                  //   child: const Text('NEXT'),
-                  // ),
-                  IconButton(
-                    iconSize: 50,
-                    icon: const Icon(
-                      Icons.arrow_back,
-                    ),
-                    color: color1,
-                    // the method which is called
-                    // when button is pressed
-                    onPressed: () => currentStep == 0
-                        ? null
-                        : setState(() {
-                            currentStep -= 1;
-                          }),
-                  ),
-                  // SizedBox used as the separator
-                  const SizedBox(
-                    width: 80,
-                  ),
-                  IconButton(
-                    iconSize: 50,
-                    icon: const Icon(
-                      Icons.arrow_forward,
-                    ),
-                    color: color1,
-                    onPressed: () {
-                      bool isLastStep = (currentStep == getSteps().length - 1);
-                      if (isLastStep) {
-                        //Do something with this information
-                      } else {
-                        setState(() {
-                          currentStep += 1;
-                        });
-                      }
-                    },
-                  ),
-                ],
-              );
-            },
+    return Loading(
+        inAsyncCall: loading,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: color1,
+            title: Text(
+              app_title,
+              style: const TextStyle(color: Colors.white),
+            ),
+            centerTitle: true,
+          ),
+          body: Container(
+              padding: const EdgeInsets.all(20),
+              child: Stepper(
+                type: StepperType.vertical,
+                currentStep: currentStep,
+                onStepCancel: () => currentStep == 0
+                    ? null
+                    : setState(() {
+                        currentStep -= 1;
+                      }),
+                onStepContinue: () {
+                  bool isLastStep = (currentStep == getSteps().length - 1);
+                  if (isLastStep) {
+                    //Do something with this information
+                  } else {
+                    setState(() {
+                      currentStep += 1;
+                    });
+                  }
+                },
+                // onStepTapped: (step) => setState(() {
+                //   currentStep = step;
+                // }),
+                onStepTapped: (int index) {
+                  if (currentStep != index) {
+                    currentStep = currentStep;
+                  }
+                },
+                controlsBuilder: (context, _) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      // TextButton(
+                      //   onPressed: (){},
+                      //   child: const Text('NEXT'),
+                      // ),
+                      IconButton(
+                        iconSize: 50,
+                        icon: const Icon(
+                          Icons.arrow_back,
+                        ),
+                        color: color1,
+                        // the method which is called
+                        // when button is pressed
+                        onPressed: () => currentStep == 0
+                            ? null
+                            : setState(() {
+                                currentStep -= 1;
+                              }),
+                      ),
+                      // SizedBox used as the separator
+                      const SizedBox(
+                        width: 80,
+                      ),
+                      IconButton(
+                        iconSize: 50,
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                        ),
+                        color: color1,
+                        onPressed: () {
+                          bool isLastStep =
+                              (currentStep == getSteps().length - 1);
+                          if (isLastStep) {
+                            //Do something with this information
+                          } else {
+                            setState(() {
+                              currentStep += 1;
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
 
-            steps: getSteps(),
-          )),
-    );
+                steps: getSteps(),
+              )),
+        ));
   }
 
   List<Step> getSteps() {
@@ -458,56 +463,38 @@ class _AnalyzerState extends State<Analyzer> {
     });
   }
 
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  Position? _currentPosition;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permantly denied, we cannot request permissions.');
-    }
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return Future.error(
-            'Location permissions are denied (actual value: $permission).');
-      }
-    }
-
-    return await Geolocator.getCurrentPosition();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   Future sendEmail() async {
-    print("PadrEx " + "Calling the SendMali");
     setState(() {
       loading = true;
     });
 
     try {
-      // Position pos=await _determinePosition();
+      await _getCurrentPosition();
       List<int> fileInByte = imageSelected.readAsBytesSync();
       String fileInBase64 = base64Encode(fileInByte);
       var body = {
         "email": email,
-        "latitude": "asldfkjlasdf",
-        "longitude": "slajkdflas",
+        "latitude": _currentPosition?.latitude.toString(),
+        "longitude": _currentPosition?.longitude.toString(),
         "file": fileInBase64,
       };
 
-      print(body.toString());
       http.Response? response = await ut.apiRequest("/mail.php", "POST", body);
-
-      print(response?.body.toString());
       Map resp = json.decode(response!.body.toString());
-      print(resp.toString());
       if (resp['code'] == 200) {
         CoolAlert.show(
           context: context,
@@ -551,5 +538,37 @@ class _AnalyzerState extends State<Analyzer> {
     setState(() {
       codex.clear();
     });
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+
+      await Geolocator.openAppSettings();
+      await Geolocator.openLocationSettings();
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
   }
 }

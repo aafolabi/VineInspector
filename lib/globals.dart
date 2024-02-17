@@ -10,7 +10,7 @@ bool first_time = true;
 String baseUrl = 'http://vineinspector.engyn.ng';
 
 const color1 = Color(0xFF358856);
-String app_title = "Grapevine";
+String app_title = "VineInspector";
 
 String fontFamily1 = "circular-std";
 
