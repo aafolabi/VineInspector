@@ -7,7 +7,7 @@ import 'package:camera/camera.dart';
 
 List<CameraDescription>? cameras;
 bool first_time = true;
-String baseUrl = 'https://padme-nwd6a.ondigitalocean.app/v1';
+String baseUrl = 'http://vineinspector.engyn.ng';
 
 const color1 = Color(0xFF358856);
 String app_title = "Grapevine";
@@ -16,16 +16,9 @@ String fontFamily1 = "circular-std";
 
 double size1 = 18.0;
 
-final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 String email = "";
 
 final global_codex = <String, dynamic>{};
 
 double deviceWidth = 0;
 double deviceHeight = 0;
-
-
-
-
-
-

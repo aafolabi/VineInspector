@@ -1,4 +1,4 @@
-
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
@@ -13,7 +13,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
-
 
 Utils ut = Utils();
 
@@ -32,102 +31,100 @@ class _AnalyzerState extends State<Analyzer> {
   // DateTime? last_visit_date = null;
   String capture_date = '';
   String last_visit_date = '';
-  bool loading=false;
+  bool loading = false;
 
   @override
   void initState() {
     super.initState();
-    // sendEmail();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: color1,
-          title: Text(
-            app_title,
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        backgroundColor: color1,
+        title: Text(
+          app_title,
         ),
-        body: Container(
-            padding: const EdgeInsets.all(20),
-            child: Stepper(
-              type: StepperType.vertical,
-              currentStep: currentStep,
-              onStepCancel: () => currentStep == 0
-                  ? null
-                  : setState(() {
-                currentStep -= 1;
-              }),
-              onStepContinue: () {
-                bool isLastStep = (currentStep == getSteps().length - 1);
-                if (isLastStep) {
-                  //Do something with this information
-                } else {
-                  setState(() {
-                    currentStep += 1;
-                  });
-                }
-              },
-              // onStepTapped: (step) => setState(() {
-              //   currentStep = step;
-              // }),
-              onStepTapped: (int index) {
-                if (currentStep != index) {
-                  currentStep = currentStep;
-                }
-              },
-              controlsBuilder: (context,_) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    // TextButton(
-                    //   onPressed: (){},
-                    //   child: const Text('NEXT'),
-                    // ),
-                    IconButton(
-                      iconSize: 50,
-                      icon: const Icon(
-                        Icons.arrow_back,
-                      ),
-                      color: color1,
-                      // the method which is called
-                      // when button is pressed
-                      onPressed: () => currentStep == 0
-                          ? null
-                          : setState(() {
-                        currentStep -= 1;
-                      }),
+        centerTitle: true,
+      ),
+      body: Container(
+          padding: const EdgeInsets.all(20),
+          child: Stepper(
+            type: StepperType.vertical,
+            currentStep: currentStep,
+            onStepCancel: () => currentStep == 0
+                ? null
+                : setState(() {
+                    currentStep -= 1;
+                  }),
+            onStepContinue: () {
+              bool isLastStep = (currentStep == getSteps().length - 1);
+              if (isLastStep) {
+                //Do something with this information
+              } else {
+                setState(() {
+                  currentStep += 1;
+                });
+              }
+            },
+            // onStepTapped: (step) => setState(() {
+            //   currentStep = step;
+            // }),
+            onStepTapped: (int index) {
+              if (currentStep != index) {
+                currentStep = currentStep;
+              }
+            },
+            controlsBuilder: (context, _) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // TextButton(
+                  //   onPressed: (){},
+                  //   child: const Text('NEXT'),
+                  // ),
+                  IconButton(
+                    iconSize: 50,
+                    icon: const Icon(
+                      Icons.arrow_back,
                     ),
-                    // SizedBox used as the separator
-                    const SizedBox(
-                      width: 80,
+                    color: color1,
+                    // the method which is called
+                    // when button is pressed
+                    onPressed: () => currentStep == 0
+                        ? null
+                        : setState(() {
+                            currentStep -= 1;
+                          }),
+                  ),
+                  // SizedBox used as the separator
+                  const SizedBox(
+                    width: 80,
+                  ),
+                  IconButton(
+                    iconSize: 50,
+                    icon: const Icon(
+                      Icons.arrow_forward,
                     ),
-                    IconButton(
-                      iconSize: 50,
-                      icon: const Icon(
-                        Icons.arrow_forward,
-                      ),
-                      color: color1,
-                      onPressed: () {
-                        bool isLastStep = (currentStep == getSteps().length - 1);
-                        if (isLastStep) {
-                          //Do something with this information
-                        } else {
-                          setState(() {
-                            currentStep += 1;
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                );
-              },
+                    color: color1,
+                    onPressed: () {
+                      bool isLastStep = (currentStep == getSteps().length - 1);
+                      if (isLastStep) {
+                        //Do something with this information
+                      } else {
+                        setState(() {
+                          currentStep += 1;
+                        });
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
 
-              steps: getSteps(),
-
-            )),
+            steps: getSteps(),
+          )),
     );
   }
 
@@ -142,50 +139,56 @@ class _AnalyzerState extends State<Analyzer> {
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('What Type of Grape?'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ToggleSwitch(
-                    initialLabelIndex: null,
-                    totalSwitches: 2,
-                    activeBgColors: [[Colors.green],[Colors.redAccent]],
-                    // borderColor: [Colors.redAccent, Colors.white],
-                    dividerColor: Colors.white,
-                    curve: Curves.bounceInOut,
-                    cornerRadius: 20.0,
-                    radiusStyle: true,
-                    labels: ['WHITE', 'RED',],
-                    onToggle: (index) {
-                      var value =  index == 0 ? 'white' : 'red';
-                      codex.addAll({'qone':value});
-                      // analyze();
-                      if(index == 0) snapPhoto(context);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text('Is Harvesting Completed?'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ToggleSwitch(
-                    initialLabelIndex: null,
-                    totalSwitches: 2,
-                    dividerColor: Colors.white,
-                    curve: Curves.bounceInOut,
-                    cornerRadius: 20.0,
-                    radiusStyle: true,
-                    labels: ['YES','NO'],
-                    onToggle: (index) {
-                      var value =  index == 0 ? 'yes' : 'no';
-                      if(index == 0) snapPhoto(context);
-                      codex.addAll({'qtwo':value});
-                    },
-                  ),
-                ],
+              children: [
+                Text('What Type of Grape?'),
+                const SizedBox(
+                  height: 10,
+                ),
+                ToggleSwitch(
+                  initialLabelIndex: null,
+                  totalSwitches: 2,
+                  activeBgColors: [
+                    [Colors.green],
+                    [Colors.redAccent]
+                  ],
+                  // borderColor: [Colors.redAccent, Colors.white],
+                  dividerColor: Colors.white,
+                  curve: Curves.bounceInOut,
+                  cornerRadius: 20.0,
+                  radiusStyle: true,
+                  labels: [
+                    'WHITE',
+                    'RED',
+                  ],
+                  onToggle: (index) {
+                    var value = index == 0 ? 'white' : 'red';
+                    codex.addAll({'qone': value});
+                    // analyze();
+                    if (index == 0) processWhiteGrape(context);
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text('Is Harvesting Completed?'),
+                const SizedBox(
+                  height: 10,
+                ),
+                ToggleSwitch(
+                  initialLabelIndex: null,
+                  totalSwitches: 2,
+                  dividerColor: Colors.white,
+                  curve: Curves.bounceInOut,
+                  cornerRadius: 20.0,
+                  radiusStyle: true,
+                  labels: ['YES', 'NO'],
+                  onToggle: (index) {
+                    var value = index == 0 ? 'yes' : 'no';
+                    if (index == 0) snapPhoto(context);
+                    codex.addAll({'qtwo': value});
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -203,17 +206,23 @@ class _AnalyzerState extends State<Analyzer> {
             ToggleSwitch(
               initialLabelIndex: null,
               totalSwitches: 2,
-              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              activeBgColors: [
+                [Colors.green],
+                [Colors.redAccent]
+              ],
               // borderColor: [Colors.redAccent, Colors.white],
               dividerColor: Colors.white,
               curve: Curves.bounceInOut,
               cornerRadius: 20.0,
               radiusStyle: true,
-              labels: ['YES', 'NO',],
+              labels: [
+                'YES',
+                'NO',
+              ],
               onToggle: (index) {
-                var value =  index == 0 ? 'yes' : 'no';
-                codex.addAll({'qthree':value});
-                if(index == 0) snapPhoto(context);
+                var value = index == 0 ? 'yes' : 'no';
+                codex.addAll({'qthree': value});
+                if (index == 0) snapPhoto(context);
               },
             ),
             const SizedBox(
@@ -226,16 +235,22 @@ class _AnalyzerState extends State<Analyzer> {
             ToggleSwitch(
               initialLabelIndex: null,
               totalSwitches: 2,
-              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              activeBgColors: [
+                [Colors.green],
+                [Colors.redAccent]
+              ],
               dividerColor: Colors.white,
               curve: Curves.bounceInOut,
               cornerRadius: 20.0,
               radiusStyle: true,
-              labels: ['YES', 'NO',],
+              labels: [
+                'YES',
+                'NO',
+              ],
               onToggle: (index) {
-                var value =  index == 0 ? 'yes' : 'no';
-                codex.addAll({'qfour':value});
-                if(index == 1) snapPhoto(context);
+                var value = index == 0 ? 'yes' : 'no';
+                codex.addAll({'qfour': value});
+                if (index == 1) snapPhoto(context);
               },
             ),
           ],
@@ -252,54 +267,53 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             DateTimePicker(
-                initialValue: '',
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2100),
-                dateLabelText: 'Date',
-                onChanged: (val) {
-                  codex.addAll({'qfive':val});
-                  capture_date = val;
-                },
-                // onChanged: (val) => codex.addAll({'qfive':val}),
-                validator: (val) {
-                  print(val);
-                  return null;
-                },
-                onSaved: (val) => codex.addAll({'qfive':val}),
+              initialValue: '',
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              dateLabelText: 'Date',
+              onChanged: (val) {
+                codex.addAll({'qfive': val});
+                capture_date = val;
+              },
+              // onChanged: (val) => codex.addAll({'qfive':val}),
+              validator: (val) {
+                print(val);
+                return null;
+              },
+              onSaved: (val) => codex.addAll({'qfive': val}),
             ),
             const SizedBox(
               height: 10,
             ),
             Text('When last were you on the field before this observation?'),
             DateTimePicker(
-                  initialValue: '',
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                  dateLabelText: 'Date',
-                  onChanged: (val) {
-                    codex.addAll({'qsix':val});
-                    DateTime last_visit_date_x = DateTime.parse(val);
-                    DateTime capture_date_x = DateTime.parse(capture_date);
-                    if(capture_date_x != null && last_visit_date_x != null){
-                      int diff = capture_date_x.difference(last_visit_date_x).inDays;
-                      if(diff <=2 ){
-                        showLowLikely();
-                      }
+                initialValue: '',
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                dateLabelText: 'Date',
+                onChanged: (val) {
+                  codex.addAll({'qsix': val});
+                  DateTime last_visit_date_x = DateTime.parse(val);
+                  DateTime capture_date_x = DateTime.parse(capture_date);
+                  if (capture_date_x != null && last_visit_date_x != null) {
+                    int diff =
+                        capture_date_x.difference(last_visit_date_x).inDays;
+                    if (diff <= 2) {
+                      showLowLikely();
                     }
-                  },
-                  // onChanged: (val) => codex.addAll({'qsix':val}),
-                  validator: (val) {
-                    print(val);
-                    return null;
-                  },
-                  onSaved: (val) {
-                    codex.addAll({'qsix':val});
-                    //Calculate D1-D2 here
                   }
-            ),
+                },
+                // onChanged: (val) => codex.addAll({'qsix':val}),
+                validator: (val) {
+                  print(val);
+                  return null;
+                },
+                onSaved: (val) {
+                  codex.addAll({'qsix': val});
+                  //Calculate D1-D2 here
+                }),
           ],
         ),
-
       ),
       Step(
         state: currentStep > 3 ? StepState.complete : StepState.indexed,
@@ -318,16 +332,22 @@ class _AnalyzerState extends State<Analyzer> {
               initialLabelIndex: null,
               totalSwitches: 2,
               minWidth: 120.0,
-              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              activeBgColors: [
+                [Colors.green],
+                [Colors.redAccent]
+              ],
               dividerColor: Colors.white,
               curve: Curves.bounceInOut,
               cornerRadius: 20.0,
               radiusStyle: true,
-              labels: ['RANDOM PATCHES', 'UNIFORM',],
+              labels: [
+                'RANDOM PATCHES',
+                'UNIFORM',
+              ],
               onToggle: (index) {
-                var value =  index == 0 ? 'random' : 'patches';
-                codex.addAll({'qseven':value});
-                if(index == 0){
+                var value = index == 0 ? 'random' : 'patches';
+                codex.addAll({'qseven': value});
+                if (index == 0) {
                   showDisease();
                 }
               },
@@ -352,19 +372,24 @@ class _AnalyzerState extends State<Analyzer> {
               initialLabelIndex: null,
               totalSwitches: 2,
               minWidth: 90.0,
-              activeBgColors: [[Colors.green],[Colors.redAccent]],
+              activeBgColors: [
+                [Colors.green],
+                [Colors.redAccent]
+              ],
               dividerColor: Colors.white,
               curve: Curves.bounceInOut,
               cornerRadius: 20.0,
               radiusStyle: true,
-              labels: ['CLEAN', 'OTHERS',],
+              labels: [
+                'CLEAN',
+                'OTHERS',
+              ],
               onToggle: (index) {
-                var value =  index == 0 ? 'clean' : 'others';
-                codex.addAll({'qten':value});
-                if(index == 0){
+                var value = index == 0 ? 'clean' : 'others';
+                codex.addAll({'qten': value});
+                if (index == 0) {
                   showLowLikely();
-                }
-                else{
+                } else {
                   showDisease();
                 }
               },
@@ -375,18 +400,41 @@ class _AnalyzerState extends State<Analyzer> {
     ];
   }
 
-  void analyze(){
+  void processWhiteGrape(BuildContext context) {
+    // sendEmail();
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text:
+            'I\'m currently not trained on white grape diagnosis, click on OK to send a picture to an expert',
+        confirmBtnText: 'OK',
+        cancelBtnText: 'CANCEL',
+        confirmBtnColor: Colors.green,
+        closeOnConfirmBtnTap: true,
+        onConfirmBtnTap: () async {
+          snapPhoto(context);
+        },
+        onCancelBtnTap: () async {
+          setState(() {});
+        });
+  }
+
+  void analyze() {
     int result = ut.analyzer(codex);
-    if(result == 3){
+    if (result == 3) {
       snapPhoto(context);
     }
   }
 
-  File? imageSelected;
+  late File imageSelected;
 
-  void snapPhoto(BuildContext context) async{
-    await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 40,
-        preferredCameraDevice: CameraDevice.rear).then((value) async {
+  void snapPhoto(BuildContext context) async {
+    await ImagePicker()
+        .pickImage(
+            source: ImageSource.camera,
+            imageQuality: 40,
+            preferredCameraDevice: CameraDevice.rear)
+        .then((value) async {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: value!.path,
         aspectRatioPresets: [CropAspectRatioPreset.square],
@@ -402,13 +450,12 @@ class _AnalyzerState extends State<Analyzer> {
         ],
       );
 
-      if (croppedFile != null){
+      if (croppedFile != null) {
         imageSelected = File(croppedFile.path);
         sendEmail();
       }
-      setState((){});
+      setState(() {});
     });
-
   }
 
   Future<Position> _determinePosition() async {
@@ -438,41 +485,46 @@ class _AnalyzerState extends State<Analyzer> {
     return await Geolocator.getCurrentPosition();
   }
 
-
-  Future sendEmail() async  {
-
+  Future sendEmail() async {
+    print("PadrEx " + "Calling the SendMali");
     setState(() {
       loading = true;
     });
 
     try {
-      Position pos=await _determinePosition();
+      // Position pos=await _determinePosition();
+      List<int> fileInByte = imageSelected.readAsBytesSync();
+      String fileInBase64 = base64Encode(fileInByte);
       var body = {
         "email": email,
-        "lat": pos.latitude,
-        "long": pos.longitude,
-        "image": "",
+        "latitude": "asldfkjlasdf",
+        "longitude": "slajkdflas",
+        "file": fileInBase64,
       };
 
-      http.Response response = await ut.apiRequest(
-          "/exchange/recieve", "POST", body);
-      if (response.statusCode == 200) {
-        ut.showToast(context, "Successful");
-      }
-      else {
-        ut.showToast(context, "Failed");
-      }
-    }
-    catch(e){
-      print("PadrEx "+e.toString());
-    }
+      print(body.toString());
+      http.Response? response = await ut.apiRequest("/mail.php", "POST", body);
 
-    // CoolAlert.show(
-    //   context: context,
-    //   type: CoolAlertType.success,
-    //   text: "Unable to Send Image",
-    // );
-
+      print(response?.body.toString());
+      Map resp = json.decode(response!.body.toString());
+      print(resp.toString());
+      if (resp['code'] == 200) {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Sample Submitted Successfully",
+        );
+      } else {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          text: "Sample could not be Submitted, Please try again",
+        );
+      }
+    } catch (e) {
+      ut.showToast(context, "Error Sending Mail, Please try again");
+      print("PadrEx " + e.toString());
+    }
 
     //reload page
     setState(() {
@@ -483,26 +535,21 @@ class _AnalyzerState extends State<Analyzer> {
 
   showLowLikely() {
     CoolAlert.show(
-      context: context,
-      type: CoolAlertType.info,
-      text: ' Disease Unlikely, check for Nutrient Deficiency'
-    );
+        context: context,
+        type: CoolAlertType.info,
+        text: ' Disease Unlikely, check for Nutrient Deficiency');
     setState(() {
       codex.clear();
     });
   }
 
-
-  showDisease(){
+  showDisease() {
     CoolAlert.show(
-      context: context,
-      type: CoolAlertType.success,
-      text: 'Possible case of disease, vine testing recommended'
-    );
+        context: context,
+        type: CoolAlertType.success,
+        text: 'Possible case of disease, vine testing recommended');
     setState(() {
       codex.clear();
     });
   }
-
-
 }

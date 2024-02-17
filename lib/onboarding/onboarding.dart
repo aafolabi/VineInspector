@@ -1,8 +1,9 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:grapevine/globals.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-import '../globals.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,44 +36,37 @@ class OnBoardingPageState extends State<OnBoardingPage> {
   void _onIntroEnd(context) async {
     await getPermissions();
 
-    final SharedPreferences prefs = await _prefs;
-    first_time = prefs.getBool("first_time")!;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    first_time = prefs.getBool("first_time") ?? true;
     if(first_time == true){
       //Collect user Email here and Save
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            var emailController = TextEditingController();
-            return AlertDialog(
-              scrollable: true,
-              title: Text('Hello'),
-              content: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'Enter your Email',
-                          hintText: 'Enter your email Address',
-                          icon: Icon(Icons.email),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                ElevatedButton(
-                    child: Text("Submit"),
-                    onPressed: () {
-                      prefs.setBool("first_time", false);
-                      prefs.setString("email", emailController.text)
-                    })
-              ],
-            );
-          });
+
+      var message = '';
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.custom,
+        barrierDismissible: true,
+        confirmBtnText: 'Save',
+        widget: TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Enter Email Address',
+            prefixIcon: Icon(
+              Icons.email_outlined,
+            ),
+          ),
+          textInputAction: TextInputAction.next,
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (value) => message = value,
+        ),
+        closeOnConfirmBtnTap: false,
+        onConfirmBtnTap: () async {
+          prefs.setBool("first_time", false);
+          prefs.setString("email",message);
+          print('I am saved');
+          print(prefs.toString());
+          Navigator.of(context).pop();
+        },
+      );
     }
 
     email = prefs.getString("email")!;
@@ -177,13 +171,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
           body:
               "A Virus-free vine is the most important investment that you can make during vineyard establishment",
           image: _buildImage('images/slider_4.jpg'),
-          decoration: pageDecoration.copyWith(
-            contentMargin: const EdgeInsets.symmetric(horizontal: 16),
-            fullScreen: true,
-            bodyFlex: 2,
-            imageFlex: 3,
-            safeArea: 100,
-          ),
+          decoration: pageDecoration,
         ),
       ],
       onDone: () => _onIntroEnd(context),
