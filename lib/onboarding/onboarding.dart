@@ -1,12 +1,11 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grapevine/globals.dart';
+import 'package:VineInspector/globals.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
@@ -23,14 +22,11 @@ class OnBoardingPageState extends State<OnBoardingPage> {
     super.initState();
   }
 
-
-
-  getPermissions()async{
+  getPermissions() async {
     var btp = await Permission.location.status;
     if (!btp.isGranted) {
       Permission.location.request();
     }
-
   }
 
   void _onIntroEnd(context) async {
@@ -38,7 +34,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     first_time = prefs.getBool("first_time") ?? true;
-    if(first_time == true){
+    if (first_time == true) {
       //Collect user Email here and Save
 
       var message = '';
@@ -61,7 +57,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         closeOnConfirmBtnTap: false,
         onConfirmBtnTap: () async {
           prefs.setBool("first_time", false);
-          prefs.setString("email",message);
+          prefs.setString("email", message);
           print('I am saved');
           print(prefs.toString());
           Navigator.of(context).pop();
@@ -120,15 +116,14 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         height: 60,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: color1,
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+            backgroundColor: color1,
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
           ),
           child: const Text(
             'Start Analysis',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           onPressed: () => _onIntroEnd(context),
-
         ),
       ),
       pages: [
@@ -148,21 +143,21 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Got Leaf Roll?",
           body:
-          "Leaf rolls are destructive and can impact yield and fruit quality.",
+              "Leaf rolls are destructive and can impact yield and fruit quality.",
           image: _buildImage('images/slider2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Got Red Blotch?",
           body:
-          "Red blotches are destructive and can impact yield and fruit quality.",
+              "Red blotches are destructive and can impact yield and fruit quality.",
           image: _buildImage('images/slider_3a_leafroll.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Insect Vector",
           body:
-          "The three-cornered alfalfa hopper is a vector for grapevine red blotch virus",
+              "The three-cornered alfalfa hopper is a vector for grapevine red blotch virus",
           image: _buildImage('images/slider_3b_red_blotch.jpg'),
           decoration: pageDecoration,
         ),
@@ -181,10 +176,12 @@ class OnBoardingPageState extends State<OnBoardingPage> {
       nextFlex: 0,
       showBackButton: false,
       //rtl: true, // Display as right-to-left
-      back: const Icon(Icons.arrow_back, color:color1),
-      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600, color:color1)),
-      next: const Icon(Icons.arrow_forward, color:color1),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600, color:color1)),
+      back: const Icon(Icons.arrow_back, color: color1),
+      skip: const Text('Skip',
+          style: TextStyle(fontWeight: FontWeight.w600, color: color1)),
+      next: const Icon(Icons.arrow_forward, color: color1),
+      done: const Text('Done',
+          style: TextStyle(fontWeight: FontWeight.w600, color: color1)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb

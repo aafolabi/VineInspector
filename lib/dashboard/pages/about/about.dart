@@ -56,7 +56,11 @@ class AboutState extends State<About> {
         'App Description',
         textAlign: TextAlign.justify,
       ),
-      applicationIcon: const FlutterLogo(size: 100),
+      applicationIcon: const Image(
+        image: AssetImage('assets/images/logo.png'),
+        width: 200,
+        height: 100,
+      ),
       applicationLegalese: 'Copyright © {{ author }}, {{ year }}',
       children: const <Widget>[
         MarkdownPageListTile(
@@ -79,15 +83,15 @@ class AboutState extends State<About> {
           title: Text('Contributing'),
           icon: Icon(Icons.share),
         ),
-        MarkdownPageListTile(
-          filename: 'CODE_OF_CONDUCT.md',
-          title: Text('Code of conduct'),
-          icon: Icon(Icons.sentiment_satisfied),
-        ),
-        LicensesPageListTile(
-          title: Text('Open source Licenses'),
-          icon: Icon(Icons.favorite),
-        ),
+        // MarkdownPageListTile(
+        //   filename: 'CODE_OF_CONDUCT.md',
+        //   title: Text('Code of conduct'),
+        //   icon: Icon(Icons.sentiment_satisfied),
+        // ),
+        // LicensesPageListTile(
+        //   title: Text('Open source Licenses'),
+        //   icon: Icon(Icons.favorite),
+        // ),
       ],
     );
 

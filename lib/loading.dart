@@ -6,8 +6,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'globals.dart';
 
-
-
 class Loading extends StatefulWidget {
   final bool inAsyncCall;
   final Widget child;
@@ -51,10 +49,10 @@ class LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
           child: Center(
               child: AnimatedOpacity(
             // child: Image(image: AssetImage('assets/images/logo.png')),
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             opacity: visible ? 1.0 : 0.3,
-            // child: Image(image: AssetImage('assets/images/logo.png')),
-            child: const Icon(CupertinoIcons.waveform_path_badge_plus,size: 55.0,color:color1,),
+            child: const Image(image: AssetImage('assets/images/logo.png')),
+            // child: const Icon(CupertinoIcons.waveform_path_badge_plus,size: 55.0,color:color1,),
           )),
         ),
         child: widget.child);
