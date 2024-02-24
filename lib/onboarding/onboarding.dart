@@ -75,6 +75,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
       // }
     } else {
       print('User is not a FIRST TIMER');
+      Navigator.pushReplacementNamed(context, '/dashboard');
     }
 
     // email = prefs.getString("email") ?? '';

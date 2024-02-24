@@ -512,10 +512,11 @@ class _AnalyzerState extends State<Analyzer> {
         "file": fileInBase64,
       };
 
-      print('The body: ' + body.toString());
+      // print('The body: ' + body.toString());
 
-      http.Response? response = await ut.apiRequest("/mail.php", "POST", body);
-      Map resp = json.decode(response!.body.toString());
+      http.Response response = await ut.apiRequest("/mail.php", "POST", body);
+
+      Map resp = json.decode(response.body.toString());
       if (resp['code'] == 200) {
         CoolAlert.show(
           context: context,
@@ -529,10 +530,12 @@ class _AnalyzerState extends State<Analyzer> {
           text: "Sample could not be Submitted, Please try again",
         );
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       ut.showToast(context, "Error Sending Mail, Please try again");
       CoolAlert.show(
-          context: context, type: CoolAlertType.error, text: e.toString());
+          context: context,
+          type: CoolAlertType.error,
+          text: e.toString() + stacktrace.toString());
       print("PadrEx " + e.toString());
     }
 

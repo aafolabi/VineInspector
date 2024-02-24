@@ -7,7 +7,7 @@ import 'globals.dart';
 import 'package:http/http.dart' as http;
 
 class Utils {
-  Future<http.Response?> apiRequest(
+  Future<http.Response> apiRequest(
       String endpoint, String method, var body) async {
     var url = Uri.parse(baseUrl + endpoint);
     // var _headers = {"Authorization": token};
@@ -15,21 +15,20 @@ class Utils {
       "Content-type": "application/x-www-form-urlencoded"
     };
 
-    http.Response? res = null;
     try {
       if (method == "GET") {
-        res = await http.get(url, headers: headers);
+        return await http.get(url, headers: headers);
       } else if (method == "POST") {
-        res = await http.post(url, headers: headers, body: body);
+        return await http.post(url, headers: headers, body: body);
       } else if (method == "PUT") {
-        res = await http.put(url, headers: headers, body: body);
+        return await http.put(url, headers: headers, body: body);
       } else {
-        res = await http.get(url, headers: headers);
+        return await http.get(url, headers: headers);
       }
     } catch (ex) {
       print("PadrexReq: " + ex.toString());
     }
-    return res;
+    return await http.get(url, headers: headers);
   }
 
   void showToast(BuildContext context, var mssg) {
