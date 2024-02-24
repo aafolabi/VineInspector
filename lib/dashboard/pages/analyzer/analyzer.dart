@@ -145,7 +145,7 @@ class _AnalyzerState extends State<Analyzer> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('What Type of Grape?'),
+                Text('What type of grape?'),
                 const SizedBox(
                   height: 10,
                 ),
@@ -175,7 +175,7 @@ class _AnalyzerState extends State<Analyzer> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text('Is Harvesting Completed?'),
+                Text('Is harvesting completed?'),
                 const SizedBox(
                   height: 10,
                 ),
@@ -565,6 +565,8 @@ class _AnalyzerState extends State<Analyzer> {
     setState(() {
       codex.clear();
     });
+
+    //There should be a mail sent to the expert with this message after OK button is filled
   }
 
   Future<bool> _handleLocationPermission() async {
