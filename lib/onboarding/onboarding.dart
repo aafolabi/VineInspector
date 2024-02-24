@@ -143,7 +143,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Start and Stay Clean",
           body:
-              "Start Clean & Stay Clean to manage grapevine virus diseases\n\nPlant only certified virus-free vines, monitor and manage insect vectors",
+              "Start clean & stay clean to manage grapevine virus diseases\n\nPlant only certified virus-free vines, monitor and manage insect vectors",
           image: _buildFullscreenImage(),
           decoration: pageDecoration.copyWith(
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),
@@ -177,7 +177,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Virus-Free Vine",
           body:
-              "A Virus-free vine is the most important investment that you can make during vineyard establishment",
+              "A virus-free vine is the most important investment that you can make during vineyard establishment",
           image: _buildImage('images/slider_4.jpg'),
           decoration: pageDecoration,
         ),
