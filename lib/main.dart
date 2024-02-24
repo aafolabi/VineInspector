@@ -1,3 +1,4 @@
+import 'package:VineInspector/onboarding/signup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +53,13 @@ class App extends StatelessWidget {
           case '/snapmail':
             return PageTransition(
               child: const SnapMail(),
+              type: PageTransitionType.rightToLeftWithFade,
+            );
+            break;
+
+          case '/signup':
+            return PageTransition(
+              child: const SignUp(),
               type: PageTransitionType.rightToLeftWithFade,
             );
             break;

@@ -7,6 +7,10 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils.dart';
+
+Utils ut = Utils();
+
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
 
@@ -35,38 +39,46 @@ class OnBoardingPageState extends State<OnBoardingPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     first_time = prefs.getBool("first_time") ?? true;
     if (first_time == true) {
+      print('The User is a First Timer');
+      Navigator.pushReplacementNamed(context, '/signup');
       //Collect user Email here and Save
-
-      var message = '';
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.custom,
-        barrierDismissible: true,
-        confirmBtnText: 'Save',
-        widget: TextFormField(
-          decoration: const InputDecoration(
-            hintText: 'Enter Email Address',
-            prefixIcon: Icon(
-              Icons.email_outlined,
-            ),
-          ),
-          textInputAction: TextInputAction.next,
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (value) => message = value,
-        ),
-        closeOnConfirmBtnTap: false,
-        onConfirmBtnTap: () async {
-          prefs.setBool("first_time", false);
-          prefs.setString("email", message);
-          print('I am saved');
-          print(prefs.toString());
-          Navigator.of(context).pop();
-        },
-      );
+      // var message = '';
+      // try {
+      //   CoolAlert.show(
+      //     context: context,
+      //     type: CoolAlertType.custom,
+      //     barrierDismissible: true,
+      //     confirmBtnText: 'Save',
+      //     widget: TextFormField(
+      //       decoration: const InputDecoration(
+      //         hintText: 'Enter Email Address',
+      //         prefixIcon: Icon(
+      //           Icons.email_outlined,
+      //         ),
+      //       ),
+      //       textInputAction: TextInputAction.next,
+      //       keyboardType: TextInputType.emailAddress,
+      //       onChanged: (value) => message = value,
+      //     ),
+      //     closeOnConfirmBtnTap: false,
+      //     onConfirmBtnTap: () async {
+      //       prefs.setBool("first_time", false);
+      //       prefs.setString("email", message);
+      //       print('I am saved');
+      //       print(prefs.toString());
+      //       ut.showToast(context, 'Saved user details successfully');
+      //       Navigator.of(context).pop();
+      //     },
+      //   );
+      // } catch (e) {
+      //   print('Exception showing toast: ' + e.toString());
+      // }
+    } else {
+      print('User is not a FIRST TIMER');
     }
 
-    email = prefs.getString("email")!;
-    Navigator.pushReplacementNamed(context, '/dashboard');
+    // email = prefs.getString("email") ?? '';
+    // Navigator.pushReplacementNamed(context, '/dashboard');
     // Navigator.pushNamed(context, '/dashboard');
   }
 

@@ -486,12 +486,33 @@ class _AnalyzerState extends State<Analyzer> {
       await _getCurrentPosition();
       List<int> fileInByte = imageSelected.readAsBytesSync();
       String fileInBase64 = base64Encode(fileInByte);
+      String? latitude = '';
+      String? longitude = '';
+      if (_currentPosition != null) {
+        latitude = _currentPosition?.latitude.toString();
+        longitude = _currentPosition?.longitude.toString();
+      } else {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          text:
+              "Unable to fetch location data\n\nPlease enable location on your device\nand try again",
+        );
+        setState(() {
+          loading = false;
+          codex.clear();
+        });
+        return;
+      }
+
       var body = {
         "email": email,
-        "latitude": _currentPosition?.latitude.toString(),
-        "longitude": _currentPosition?.longitude.toString(),
+        "latitude": latitude,
+        "longitude": longitude,
         "file": fileInBase64,
       };
+
+      print('The body: ' + body.toString());
 
       http.Response? response = await ut.apiRequest("/mail.php", "POST", body);
       Map resp = json.decode(response!.body.toString());
@@ -510,6 +531,8 @@ class _AnalyzerState extends State<Analyzer> {
       }
     } catch (e) {
       ut.showToast(context, "Error Sending Mail, Please try again");
+      CoolAlert.show(
+          context: context, type: CoolAlertType.error, text: e.toString());
       print("PadrEx " + e.toString());
     }
 
@@ -533,7 +556,8 @@ class _AnalyzerState extends State<Analyzer> {
   showDisease() {
     CoolAlert.show(
         context: context,
-        type: CoolAlertType.success,
+        type: CoolAlertType.info,
+        title: 'Oops',
         text: 'Possible case of disease, vine testing recommended');
     setState(() {
       codex.clear();
