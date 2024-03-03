@@ -15,7 +15,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 
 Utils ut = Utils();
 
@@ -29,9 +28,7 @@ class Analyzer extends StatefulWidget {
 class _AnalyzerState extends State<Analyzer> {
   int currentStep = 0;
   final codex = <String, dynamic>{};
-  final codex_array = [];
-  // DateTime? capture_date = null;
-  // DateTime? last_visit_date = null;
+  final codex_array = [null, null, null, null, null, null, null, null];
   String capture_date = '';
   String last_visit_date = '';
   bool loading = false;
@@ -65,13 +62,18 @@ class _AnalyzerState extends State<Analyzer> {
                         currentStep -= 1;
                       }),
                 onStepContinue: () {
-                  bool isLastStep = (currentStep == getSteps().length - 1);
-                  if (isLastStep) {
-                    //Do something with this information
+                  bool valid = validateInput(currentStep);
+                  if (valid) {
+                    bool isLastStep = (currentStep == getSteps().length - 1);
+                    if (isLastStep) {
+                      //Do something with this information
+                    } else {
+                      setState(() {
+                        currentStep += 1;
+                      });
+                    }
                   } else {
-                    setState(() {
-                      currentStep += 1;
-                    });
+                    ut.showLongToast(context, "Please Select a Value");
                   }
                 },
                 // onStepTapped: (step) => setState(() {
@@ -393,7 +395,7 @@ class _AnalyzerState extends State<Analyzer> {
               ],
               onToggle: (index) {
                 var value = index == 0 ? 'clean' : 'others';
-                codex.addAll({'qten': value});
+                codex.addAll({'qeight': value});
                 if (index == 0) {
                   showLowLikely();
                 } else {
@@ -606,6 +608,13 @@ class _AnalyzerState extends State<Analyzer> {
               'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
+    return true;
+  }
+
+  validateInput(currentStep) {
+    if (currentStep == 1) if (codex["qone"] == null || codex["qtwo"] == null)
+      return false;
+
     return true;
   }
 }
