@@ -53,6 +53,7 @@ dependencies:
   package_info_plus: ^4.2.0
   http: ^1.2.1
   geolocator: ^11.0.0
+  geocode: ^1.0.3
   permission_handler: ^11.3.0
   scrollable_text_indicator: ^0.0.2
   flutter_launcher_icons: ^0.13.1

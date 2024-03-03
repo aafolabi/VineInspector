@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:VineInspector/globals.dart';
 import 'package:VineInspector/loading.dart';
 import 'package:VineInspector/utils.dart';
+import 'package:geocode/geocode.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -14,6 +15,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 Utils ut = Utils();
 
@@ -486,11 +488,18 @@ class _AnalyzerState extends State<Analyzer> {
       await _getCurrentPosition();
       List<int> fileInByte = imageSelected.readAsBytesSync();
       String fileInBase64 = base64Encode(fileInByte);
-      String? latitude = '';
-      String? longitude = '';
-      if (_currentPosition != null) {
-        latitude = _currentPosition?.latitude.toString();
-        longitude = _currentPosition?.longitude.toString();
+      double latitude = 0;
+      double longitude = 0;
+      String address = '';
+      final currentPosition = _currentPosition;
+      if (currentPosition != null) {
+        latitude = currentPosition.latitude;
+        longitude = currentPosition.longitude;
+        final currentAddress = await GeoCode().reverseGeocoding(
+            latitude: currentPosition.latitude,
+            longitude: currentPosition.longitude);
+        address =
+            "${currentAddress.streetNumber}, ${currentAddress.streetAddress}, ${currentAddress.city}, ${currentAddress.region}, ${currentAddress.countryCode}, ${currentAddress.postal}";
       } else {
         CoolAlert.show(
           context: context,
@@ -510,9 +519,8 @@ class _AnalyzerState extends State<Analyzer> {
         "latitude": latitude,
         "longitude": longitude,
         "file": fileInBase64,
+        "address": address,
       };
-
-      // print('The body: ' + body.toString());
 
       http.Response response = await ut.apiRequest("/mail.php", "POST", body);
 
