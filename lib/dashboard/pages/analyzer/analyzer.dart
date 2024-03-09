@@ -194,7 +194,7 @@ class _AnalyzerState extends State<Analyzer> {
                   labels: ['YES', 'NO'],
                   onToggle: (index) {
                     var value = index == 0 ? 'yes' : 'no';
-                    if (index == 0) snapPhoto(context);
+                    if (index == 0) snapPhotoConfirm(context);
                     codex.addAll({'qtwo': value});
                     codindex.addAll({'qtwo': index});
                   },
@@ -234,7 +234,7 @@ class _AnalyzerState extends State<Analyzer> {
                 var value = index == 0 ? 'yes' : 'no';
                 codex.addAll({'qthree': value});
                 codindex.addAll({'qthree': index});
-                if (index == 0) snapPhoto(context);
+                if (index == 0) snapPhotoConfirm(context);
               },
             ),
             const SizedBox(
@@ -263,7 +263,7 @@ class _AnalyzerState extends State<Analyzer> {
                 var value = index == 0 ? 'yes' : 'no';
                 codex.addAll({'qfour': value});
                 codindex.addAll({'qfour': index});
-                if (index == 1) snapPhoto(context);
+                if (index == 1) snapPhotoConfirm(context);
               },
             ),
           ],
@@ -344,7 +344,7 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: null,
+              initialLabelIndex: codindex['qseven'],
               totalSwitches: 2,
               minWidth: 120.0,
               activeBgColors: [
@@ -362,6 +362,7 @@ class _AnalyzerState extends State<Analyzer> {
               onToggle: (index) {
                 var value = index == 0 ? 'random' : 'patches';
                 codex.addAll({'qseven': value});
+                codindex.addAll({'qseven': index});
                 if (index == 0) {
                   showDisease();
                 }
@@ -384,7 +385,7 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: null,
+              initialLabelIndex: codindex['qeight'],
               totalSwitches: 2,
               minWidth: 90.0,
               activeBgColors: [
@@ -402,6 +403,7 @@ class _AnalyzerState extends State<Analyzer> {
               onToggle: (index) {
                 var value = index == 0 ? 'clean' : 'others';
                 codex.addAll({'qeight': value});
+                codindex.addAll({'qeight': index});
                 if (index == 0) {
                   showLowLikely();
                 } else {
@@ -437,11 +439,28 @@ class _AnalyzerState extends State<Analyzer> {
   void analyze() {
     int result = ut.analyzer(codex);
     if (result == 3) {
-      snapPhoto(context);
+      snapPhotoConfirm(context);
     }
   }
 
   late File imageSelected;
+
+  void snapPhotoConfirm(BuildContext context) {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        text: 'Take a picture of the vine.\n\nPress OK to Proceed',
+        confirmBtnText: 'OK',
+        cancelBtnText: 'CANCEL',
+        confirmBtnColor: Colors.green,
+        closeOnConfirmBtnTap: true,
+        onConfirmBtnTap: () async {
+          snapPhoto(context);
+        },
+        onCancelBtnTap: () async {
+          setState(() {});
+        });
+  }
 
   void snapPhoto(BuildContext context) async {
     await ImagePicker()
@@ -469,7 +488,9 @@ class _AnalyzerState extends State<Analyzer> {
         imageSelected = File(croppedFile.path);
         sendEmail();
       }
-      setState(() {});
+      setState(() {
+        codindex.clear();
+      });
     });
   }
 
@@ -622,7 +643,23 @@ class _AnalyzerState extends State<Analyzer> {
       if (codex["qone"] == null || codex["qtwo"] == null) {
         return false;
       }
-    }
+    } else if (currentStep == 1) {
+      if (codex["qthree"] == null || codex["qfour"] == null) {
+        return false;
+      }
+    } else if (currentStep == 2) {
+      if (codex["qfive"] == null || codex["qsix"] == null) {
+        return false;
+      }
+    } else if (currentStep == 3) {
+      if (codex["qseven"] == null) {
+        return false;
+      }
+    } else if (currentStep == 4) {
+      if (codex["qeight"] == null) {
+        return false;
+      }
+    } else {}
 
     return true;
   }
