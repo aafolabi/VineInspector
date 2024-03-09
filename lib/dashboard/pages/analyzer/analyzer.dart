@@ -28,6 +28,7 @@ class Analyzer extends StatefulWidget {
 class _AnalyzerState extends State<Analyzer> {
   int currentStep = 0;
   final codex = <String, dynamic>{};
+  final codindex = <String, dynamic?>{};
   final codex_array = [null, null, null, null, null, null, null, null];
   String capture_date = '';
   String last_visit_date = '';
@@ -62,18 +63,13 @@ class _AnalyzerState extends State<Analyzer> {
                         currentStep -= 1;
                       }),
                 onStepContinue: () {
-                  bool valid = validateInput(currentStep);
-                  if (valid) {
-                    bool isLastStep = (currentStep == getSteps().length - 1);
-                    if (isLastStep) {
-                      //Do something with this information
-                    } else {
-                      setState(() {
-                        currentStep += 1;
-                      });
-                    }
+                  bool isLastStep = (currentStep == getSteps().length - 1);
+                  if (isLastStep) {
+                    //Do something with this information
                   } else {
-                    ut.showLongToast(context, "Please Select a Value");
+                    setState(() {
+                      currentStep += 1;
+                    });
                   }
                 },
                 // onStepTapped: (step) => setState(() {
@@ -117,14 +113,19 @@ class _AnalyzerState extends State<Analyzer> {
                         ),
                         color: color1,
                         onPressed: () {
-                          bool isLastStep =
-                              (currentStep == getSteps().length - 1);
-                          if (isLastStep) {
-                            //Do something with this information
+                          bool valid = validateInput(currentStep);
+                          if (valid) {
+                            bool isLastStep =
+                                (currentStep == getSteps().length - 1);
+                            if (isLastStep) {
+                              //Do something with this information
+                            } else {
+                              setState(() {
+                                currentStep += 1;
+                              });
+                            }
                           } else {
-                            setState(() {
-                              currentStep += 1;
-                            });
+                            ut.showLongToast(context, "Please Select a Value");
                           }
                         },
                       ),
@@ -154,7 +155,7 @@ class _AnalyzerState extends State<Analyzer> {
                   height: 10,
                 ),
                 ToggleSwitch(
-                  initialLabelIndex: null,
+                  initialLabelIndex: codindex['qone'],
                   totalSwitches: 2,
                   activeBgColors: [
                     [Colors.green],
@@ -172,7 +173,7 @@ class _AnalyzerState extends State<Analyzer> {
                   onToggle: (index) {
                     var value = index == 0 ? 'white' : 'red';
                     codex.addAll({'qone': value});
-                    // analyze();
+                    codindex.addAll({'qone': index});
                     if (index == 0) processWhiteGrape(context);
                   },
                 ),
@@ -184,7 +185,7 @@ class _AnalyzerState extends State<Analyzer> {
                   height: 10,
                 ),
                 ToggleSwitch(
-                  initialLabelIndex: null,
+                  initialLabelIndex: codindex['qtwo'],
                   totalSwitches: 2,
                   dividerColor: Colors.white,
                   curve: Curves.bounceInOut,
@@ -195,6 +196,7 @@ class _AnalyzerState extends State<Analyzer> {
                     var value = index == 0 ? 'yes' : 'no';
                     if (index == 0) snapPhoto(context);
                     codex.addAll({'qtwo': value});
+                    codindex.addAll({'qtwo': index});
                   },
                 ),
               ],
@@ -213,9 +215,9 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: null,
+              initialLabelIndex: codindex['qthree'],
               totalSwitches: 2,
-              activeBgColors: [
+              activeBgColors: const [
                 [Colors.green],
                 [Colors.redAccent]
               ],
@@ -224,13 +226,14 @@ class _AnalyzerState extends State<Analyzer> {
               curve: Curves.bounceInOut,
               cornerRadius: 20.0,
               radiusStyle: true,
-              labels: [
+              labels: const [
                 'YES',
                 'NO',
               ],
               onToggle: (index) {
                 var value = index == 0 ? 'yes' : 'no';
                 codex.addAll({'qthree': value});
+                codindex.addAll({'qthree': index});
                 if (index == 0) snapPhoto(context);
               },
             ),
@@ -242,7 +245,7 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             ToggleSwitch(
-              initialLabelIndex: null,
+              initialLabelIndex: codindex['qfour'],
               totalSwitches: 2,
               activeBgColors: [
                 [Colors.green],
@@ -259,6 +262,7 @@ class _AnalyzerState extends State<Analyzer> {
               onToggle: (index) {
                 var value = index == 0 ? 'yes' : 'no';
                 codex.addAll({'qfour': value});
+                codindex.addAll({'qfour': index});
                 if (index == 1) snapPhoto(context);
               },
             ),
@@ -276,12 +280,13 @@ class _AnalyzerState extends State<Analyzer> {
               height: 10,
             ),
             DateTimePicker(
-              initialValue: '',
+              initialValue: codindex['qfive'],
               firstDate: DateTime(2000),
               lastDate: DateTime(2100),
               dateLabelText: 'Date',
               onChanged: (val) {
                 codex.addAll({'qfive': val});
+                codindex.addAll({'qfive': val});
                 capture_date = val;
               },
               // onChanged: (val) => codex.addAll({'qfive':val}),
@@ -296,12 +301,13 @@ class _AnalyzerState extends State<Analyzer> {
             ),
             Text('When last were you on the field before this observation?'),
             DateTimePicker(
-                initialValue: '',
+                initialValue: codindex['qsix'],
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2100),
                 dateLabelText: 'Date',
                 onChanged: (val) {
                   codex.addAll({'qsix': val});
+                  codindex.addAll({'qsix': val});
                   DateTime last_visit_date_x = DateTime.parse(val);
                   DateTime capture_date_x = DateTime.parse(capture_date);
                   if (capture_date_x != null && last_visit_date_x != null) {
@@ -612,8 +618,11 @@ class _AnalyzerState extends State<Analyzer> {
   }
 
   validateInput(currentStep) {
-    if (currentStep == 1) if (codex["qone"] == null || codex["qtwo"] == null)
-      return false;
+    if (currentStep == 0) {
+      if (codex["qone"] == null || codex["qtwo"] == null) {
+        return false;
+      }
+    }
 
     return true;
   }
