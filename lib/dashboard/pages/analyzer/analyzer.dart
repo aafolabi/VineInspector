@@ -10,6 +10,7 @@ import 'package:VineInspector/utils.dart';
 import 'package:geocode/geocode.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:http/http.dart' as http;
@@ -275,7 +276,7 @@ class _AnalyzerState extends State<Analyzer> {
         title: const Text("Step 3"),
         content: Column(
           children: [
-            Text('Observation Date'),
+            const Text('Observation Date'),
             const SizedBox(
               height: 10,
             ),
@@ -291,7 +292,6 @@ class _AnalyzerState extends State<Analyzer> {
               },
               // onChanged: (val) => codex.addAll({'qfive':val}),
               validator: (val) {
-                print(val);
                 return null;
               },
               onSaved: (val) => codex.addAll({'qfive': val}),
@@ -299,7 +299,8 @@ class _AnalyzerState extends State<Analyzer> {
             const SizedBox(
               height: 10,
             ),
-            Text('When last were you on the field before this observation?'),
+            const Text(
+                'When last were you on the field before this observation?'),
             DateTimePicker(
                 initialValue: codindex['qsix'],
                 firstDate: DateTime(2000),
@@ -339,7 +340,7 @@ class _AnalyzerState extends State<Analyzer> {
             const SizedBox(
               height: 10,
             ),
-            Text('Disease pattern in the vineyard'),
+            const Text('Disease pattern in the vineyard'),
             const SizedBox(
               height: 10,
             ),
@@ -347,7 +348,7 @@ class _AnalyzerState extends State<Analyzer> {
               initialLabelIndex: codindex['qseven'],
               totalSwitches: 2,
               minWidth: 120.0,
-              activeBgColors: [
+              activeBgColors: const [
                 [Colors.green],
                 [Colors.redAccent]
               ],
@@ -355,7 +356,7 @@ class _AnalyzerState extends State<Analyzer> {
               curve: Curves.bounceInOut,
               cornerRadius: 20.0,
               radiusStyle: true,
-              labels: [
+              labels: const [
                 'RANDOM PATCHES',
                 'UNIFORM',
               ],
@@ -449,7 +450,8 @@ class _AnalyzerState extends State<Analyzer> {
     CoolAlert.show(
         context: context,
         type: CoolAlertType.confirm,
-        text: 'Take a picture of the vine.\n\nPress OK to Proceed',
+        text: 'Please Take a picture of the vine.\n\nPress OK to Proceed',
+        title: '',
         confirmBtnText: 'OK',
         cancelBtnText: 'CANCEL',
         confirmBtnColor: Colors.green,
@@ -509,6 +511,8 @@ class _AnalyzerState extends State<Analyzer> {
   }
 
   Future sendEmail() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    email = prefs.getString("email") ?? '';
     setState(() {
       loading = true;
     });
@@ -545,8 +549,8 @@ class _AnalyzerState extends State<Analyzer> {
 
       var body = {
         "email": email,
-        "latitude": latitude,
-        "longitude": longitude,
+        "latitude": latitude.toString(),
+        "longitude": longitude.toString(),
         "file": fileInBase64,
         "address": address,
       };

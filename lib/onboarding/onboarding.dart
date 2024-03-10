@@ -39,48 +39,12 @@ class OnBoardingPageState extends State<OnBoardingPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     first_time = prefs.getBool("first_time") ?? true;
     if (first_time == true) {
-      print('The User is a First Timer');
+      // print('The User is a First Timer');
       Navigator.pushReplacementNamed(context, '/signup');
-      //Collect user Email here and Save
-      // var message = '';
-      // try {
-      //   CoolAlert.show(
-      //     context: context,
-      //     type: CoolAlertType.custom,
-      //     barrierDismissible: true,
-      //     confirmBtnText: 'Save',
-      //     widget: TextFormField(
-      //       decoration: const InputDecoration(
-      //         hintText: 'Enter Email Address',
-      //         prefixIcon: Icon(
-      //           Icons.email_outlined,
-      //         ),
-      //       ),
-      //       textInputAction: TextInputAction.next,
-      //       keyboardType: TextInputType.emailAddress,
-      //       onChanged: (value) => message = value,
-      //     ),
-      //     closeOnConfirmBtnTap: false,
-      //     onConfirmBtnTap: () async {
-      //       prefs.setBool("first_time", false);
-      //       prefs.setString("email", message);
-      //       print('I am saved');
-      //       print(prefs.toString());
-      //       ut.showToast(context, 'Saved user details successfully');
-      //       Navigator.of(context).pop();
-      //     },
-      //   );
-      // } catch (e) {
-      //   print('Exception showing toast: ' + e.toString());
-      // }
     } else {
-      print('User is not a FIRST TIMER');
+      // print('User is not a FIRST TIMER');
       Navigator.pushReplacementNamed(context, '/dashboard');
     }
-
-    // email = prefs.getString("email") ?? '';
-    // Navigator.pushReplacementNamed(context, '/dashboard');
-    // Navigator.pushNamed(context, '/dashboard');
   }
 
   Widget _buildFullscreenImage() {
