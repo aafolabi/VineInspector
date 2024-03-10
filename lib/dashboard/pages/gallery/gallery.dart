@@ -1,7 +1,13 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 import '../../../globals.dart';
+
+final List<String> imgList = [
+  'assets/images/fullscreen.jpg',
+  'assets/images/slider2.jpg',
+  'assets/images/slider_3a_leafroll.jpg'
+];
 
 class Gallery extends StatelessWidget {
   const Gallery({Key? key}) : super(key: key);
@@ -17,27 +23,36 @@ class Gallery extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: ImageSlideshow(
-        indicatorColor: Colors.blue,
-        onPageChanged: (value) {
-          debugPrint('Page changed: $value');
+      body: Builder(
+        builder: (context) {
+          final double height = MediaQuery.of(context).size.height;
+          return CarouselSlider(
+            options: CarouselOptions(
+              height: height,
+              viewportFraction: 1.0,
+              enlargeCenterPage: true,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 3),
+              autoPlayAnimationDuration: Duration(milliseconds: 500),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeFactor: 0.3,
+              // onPageChanged: callbackFunction,
+              scrollDirection: Axis.horizontal,
+            ),
+            items: imgList
+                .map((item) => Container(
+                      child: Center(
+                          child: Image.asset(
+                        item,
+                        fit: BoxFit.cover,
+                        height: height,
+                      )),
+                    ))
+                .toList(),
+          );
         },
-        autoPlayInterval: 3000,
-        isLoop: true,
-        children: [
-          Image.asset(
-            'assets/images/slider1.jpg',
-            fit: BoxFit.cover,
-          ),
-          Image.asset(
-            'assets/images/slider2.jpg',
-            fit: BoxFit.cover,
-          ),
-          Image.asset(
-            'assets/images/slider_4.jpg',
-            fit: BoxFit.cover,
-          ),
-        ],
       ),
     );
   }
