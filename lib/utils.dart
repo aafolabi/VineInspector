@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'globals.dart';
 import 'package:http/http.dart' as http;
+
+import 'globals.dart';
 
 class Utils {
   Future<http.Response> apiRequest(

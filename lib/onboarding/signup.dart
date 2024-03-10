@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import '../utils.dart';
-import 'package:flutter/material.dart';
 import 'package:VineInspector/globals.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils.dart';
 
 Utils ut = Utils();
 

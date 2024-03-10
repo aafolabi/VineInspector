@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:scrollable_text_indicator/scrollable_text_indicator.dart';
 
 import '../../../globals.dart';
 

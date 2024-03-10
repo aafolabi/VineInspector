@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:VineInspector/dashboard/pages/about/about.dart';
 import 'package:VineInspector/dashboard/pages/analyzer/analyzer.dart';
 import 'package:VineInspector/dashboard/pages/gallery/gallery.dart';
 import 'package:VineInspector/dashboard/pages/guide/guide.dart';
+import 'package:flutter/material.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
 import '../globals.dart';
@@ -25,6 +25,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   static const pages = [Analyzer(), Guide(), Gallery(), About()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

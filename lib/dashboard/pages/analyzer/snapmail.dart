@@ -1,13 +1,15 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
+
 import 'package:VineInspector/globals.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 
 // List<CameraDescription>? cameras;
 
 class SnapMail extends StatefulWidget {
   // const SnapMail({Key? key, required this.title}) : super(key: key);
   const SnapMail({Key? key}) : super(key: key);
+
   // final String title;
 
   @override

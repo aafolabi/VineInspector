@@ -1,21 +1,20 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cool_alert/cool_alert.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:VineInspector/globals.dart';
 import 'package:VineInspector/loading.dart';
 import 'package:VineInspector/utils.dart';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'package:geolocator/geolocator.dart';
 
 Utils ut = Utils();
 

@@ -4,6 +4,7 @@ class CustomInput extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final String? hint;
   final InputBorder? inputBorder;
+
   const CustomInput({Key? key, this.onChanged, this.hint, this.inputBorder})
       : super(key: key);
 

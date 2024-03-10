@@ -1,15 +1,13 @@
-import 'package:VineInspector/onboarding/signup.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:VineInspector/dashboard/dashboard.dart';
 import 'package:VineInspector/dashboard/pages/analyzer/snapmail.dart';
 import 'package:VineInspector/onboarding/onboarding.dart';
-import 'package:introduction_screen/introduction_screen.dart';
+import 'package:VineInspector/onboarding/signup.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'globals.dart';
-import 'package:camera/camera.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
