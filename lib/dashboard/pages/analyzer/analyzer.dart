@@ -550,8 +550,8 @@ class _AnalyzerState extends State<Analyzer> {
         "email": email,
         "latitude": latitude.toString(),
         "longitude": longitude.toString(),
-        "file": fileInBase64,
         "address": address,
+        "file": fileInBase64,
       };
 
       http.Response response = await ut.apiRequest("/mail.php", "POST", body);
@@ -575,7 +575,8 @@ class _AnalyzerState extends State<Analyzer> {
       CoolAlert.show(
           context: context,
           type: CoolAlertType.error,
-          text: e.toString() + stacktrace.toString());
+          // text: e.toString() + stacktrace.toString()
+          text: "Error Sending Mail, Please try again");
       print("PadrEx " + e.toString());
     }
 
